@@ -2,10 +2,10 @@
 -- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 29, 2022 at 08:03 PM
--- Server version: 10.4.21-MariaDB
--- PHP Version: 8.0.10
+-- Host: 127.0.0.1
+-- Generation Time: Dec 01, 2022 at 08:13 PM
+-- Server version: 10.4.22-MariaDB
+-- PHP Version: 8.1.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 --
 -- Database: `epd2022`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `announcements`
+--
+
+CREATE TABLE `announcements` (
+  `id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `body` text NOT NULL,
+  `is_project` int(11) NOT NULL DEFAULT 0,
+  `creation_date` date NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `announcements`
+--
+
+INSERT INTO `announcements` (`id`, `title`, `body`, `is_project`, `creation_date`) VALUES
+(2, 'xdxdxd', 'xdxd', 1, '2022-12-01'),
+(3, 'asd', 'asdasdas', 0, '2022-12-01'),
+(4, 'new projectd', 'project included \n\n\nxD\n<br />\n\nbars', 1, '2022-12-01');
 
 -- --------------------------------------------------------
 
@@ -72,6 +95,12 @@ INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `salt`,
 --
 
 --
+-- Indexes for table `announcements`
+--
+ALTER TABLE `announcements`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `documents`
 --
 ALTER TABLE `documents`
@@ -88,6 +117,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `announcements`
+--
+ALTER TABLE `announcements`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `documents`
 --
 ALTER TABLE `documents`
@@ -97,7 +132,7 @@ ALTER TABLE `documents`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
