@@ -1,1 +1,3 @@
-<h1>register</h1>
+<?= Account::NoLogin(); ?>
+
+<h1><?= $title; ?></h1>

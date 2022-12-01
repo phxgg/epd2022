@@ -1,1 +1,3 @@
-<h1>hello</h1>
+<?= Account::LoginRequired(); ?>
+
+<h1><?= $title; ?></h1>

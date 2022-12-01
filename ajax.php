@@ -4,7 +4,8 @@ header('Content-Type: application/json; charset=utf-8');
 
 require_once 'app/init.php';
 
-function reply($status, $data) {
+function reply($status, $data)
+{
   die(json_encode(['status' => $status, 'data' => $data]));
 }
 
@@ -18,15 +19,25 @@ if (@$_SERVER['REQUEST_METHOD'] !== 'POST') die();
 $allowed_actions = [
   'load-user',
   'load-users',
+  'load-announcements',
+  'load-announcement',
+
   'change-email',
   'change-password',
   'register',
+
   'add-user',
+  'add-announcement',
+
   'edit-user',
-  'view-documents',
-  'upload-documents',
+  'edit-announcement',
+
   'delete-documents',
   'delete-user',
+  'delete-announcement',
+
+  'view-documents',
+  'upload-documents',
 ];
 
 // Get current action
@@ -53,6 +64,20 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data);
     break;
+  case 'load-announcement':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Announcements::Fetch($_POST['id']);
+
+    if ($data === NULL)
+      reply(StatusCodes::Error, NULL);
+
+    reply(StatusCodes::OK, $data);
+    break;
   case 'load-users':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You are not a tutor.');
@@ -64,10 +89,21 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data);
     break;
+  case 'load-announcements':
+    if (!Account::IsLoggedIn())
+      reply(StatusCodes::Error, 'Not logged in.');
+
+    $data = Announcements::GetAllAnnouncements();
+
+    if ($data === NULL)
+      reply(StatusCodes::Error, NULL);
+
+    reply(StatusCodes::OK, $data);
+    break;
   case 'change-email':
     if (!Account::IsLoggedIn())
       reply(StatusCodes::Error, 'Not logged in.');
-    
+
     if (!isset($_POST['currentpassword']) || !isset($_POST['newemail']))
       reply(StatusCodes::Error, 'Invalid parameters.');
 
@@ -96,14 +132,15 @@ switch ($action) {
     if (Account::IsLoggedIn())
       reply(StatusCodes::Error, 'You are already logged in.');
 
-    if (!isset($_POST['firstname'])
+    if (
+      !isset($_POST['firstname'])
       || !isset($_POST['lastname'])
       || !isset($_POST['email'])
       || !isset($_POST['password'])
       || !isset($_POST['confirmpassword'])
     )
       reply(StatusCodes::Error, 'Invalid parameters.');
-    
+
     $data = Account::Register(
       $_POST['firstname'],
       $_POST['lastname'],
@@ -124,14 +161,15 @@ switch ($action) {
     $role = 0;
     if (isset($_POST['role'])) $role = $_POST['role'];
 
-    if (!isset($_POST['firstname'])
+    if (
+      !isset($_POST['firstname'])
       || !isset($_POST['lastname'])
       || !isset($_POST['email'])
       || !isset($_POST['password'])
       || !isset($_POST['confirmpassword'])
     )
       reply(StatusCodes::Error, 'Invalid parameters.');
-    
+
     $data = Users::AddUser(
       $_POST['firstname'],
       $_POST['lastname'],
@@ -146,6 +184,30 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data[1]);
     break;
+  case 'add-announcement':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    $isproject = 0;
+    if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
+
+    if (
+      !isset($_POST['title'])
+      || !isset($_POST['body'])
+    )
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Announcements::AddAnnouncement(
+      $_POST['title'],
+      $_POST['body'],
+      $isproject
+    );
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
   case 'edit-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You are not a tutor.');
@@ -153,13 +215,14 @@ switch ($action) {
     $role = 0;
     if (isset($_POST['role'])) $role = $_POST['role'];
 
-    if (!isset($_POST['uid'])
+    if (
+      !isset($_POST['uid'])
       || !isset($_POST['firstname'])
       || !isset($_POST['lastname'])
       || !isset($_POST['email'])
     )
       reply(StatusCodes::Error, 'Invalid parameters.');
-    
+
     $data = Users::EditUser(
       $_POST['uid'],
       $_POST['firstname'],
@@ -173,51 +236,108 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data[1]);
     break;
-  // case 'view-documents':
-  //   if (!Account::IsLoggedIn())
-  //     reply(StatusCodes::Error, 'You cannot access this.');
+    // case 'view-documents':
+    //   if (!Account::IsLoggedIn())
+    //     reply(StatusCodes::Error, 'You cannot access this.');
 
-  //   if (!isset($_POST['sid']))
-  //     reply(StatusCodes::Error, 'Invalid parameters.');
+    //   if (!isset($_POST['sid']))
+    //     reply(StatusCodes::Error, 'Invalid parameters.');
 
-  //   $data = Stores::ViewDocuments($_POST['sid']);
+    //   $data = Stores::ViewDocuments($_POST['sid']);
 
-  //   if ($data[0] === NULL)
-  //     reply(StatusCodes::Error, $data[1]);
-  //   elseif ($data[0] == 'info')
-  //     reply(StatusCodes::Info, $data[1]);
-      
-  //   reply(StatusCodes::OK, $data[1]);
-  //   break;
+    //   if ($data[0] === NULL)
+    //     reply(StatusCodes::Error, $data[1]);
+    //   elseif ($data[0] == 'info')
+    //     reply(StatusCodes::Info, $data[1]);
 
-  // case 'delete-documents':
-  //   if (!Account::IsLoggedIn() || !Account::IsTutor())
-  //     reply(StatusCodes::Error, 'You cannot access this.');
+    //   reply(StatusCodes::OK, $data[1]);
+    //   break;
 
-  //   if (!isset($_POST['sid']))
-  //     reply(StatusCodes::Error, 'Invalid parameters.');
+    // case 'delete-documents':
+    //   if (!Account::IsLoggedIn() || !Account::IsTutor())
+    //     reply(StatusCodes::Error, 'You cannot access this.');
 
-  //   $data = Stores::DeleteDocuments($_POST['sid']);
+    //   if (!isset($_POST['sid']))
+    //     reply(StatusCodes::Error, 'Invalid parameters.');
 
-  //   if ($data[0] === NULL)
-  //     reply(StatusCodes::Error, $data[1]);
+    //   $data = Stores::DeleteDocuments($_POST['sid']);
 
-  //   reply(StatusCodes::OK, $data[1]);
-  //   break;
-  
-  // case 'upload-documents':
-  //   if (!Account::IsLoggedIn() || !Account::IsTutor())
-  //     reply(StatusCodes::Error, 'You cannot access this.');
+    //   if ($data[0] === NULL)
+    //     reply(StatusCodes::Error, $data[1]);
 
-  //   if (!isset($_FILES['document']))
-  //     reply(StatusCodes::Error, 'Invalid parameters.');
+    //   reply(StatusCodes::OK, $data[1]);
+    //   break;
 
-  //   $data = Stores::UploadDocuments($_FILES['document']);
+    // case 'upload-documents':
+    //   if (!Account::IsLoggedIn() || !Account::IsTutor())
+    //     reply(StatusCodes::Error, 'You cannot access this.');
 
-  //   if ($data[0] === NULL)
-  //     reply(StatusCodes::Error, $data[1]);
+    //   if (!isset($_FILES['document']))
+    //     reply(StatusCodes::Error, 'Invalid parameters.');
 
-  //   reply(StatusCodes::OK, $data[1]);
+    //   $data = Stores::UploadDocuments($_FILES['document']);
+
+    //   if ($data[0] === NULL)
+    //     reply(StatusCodes::Error, $data[1]);
+
+    //   reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'edit-announcement':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    $isproject = 0;
+    if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
+
+    if (
+      !isset($_POST['id'])
+      || !isset($_POST['title'])
+      || !isset($_POST['body'])
+    )
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Announcements::EditAnnouncement(
+      $_POST['id'],
+      $_POST['title'],
+      $_POST['body'],
+      $isproject
+    );
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
+    break;
+  case 'add-user':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    $role = 0;
+    if (isset($_POST['role'])) $rank = $_POST['role'];
+
+    if (
+      !isset($_POST['firstname'])
+      || !isset($_POST['lastname'])
+      || !isset($_POST['email'])
+      || !isset($_POST['password'])
+      || !isset($_POST['confirmpassword'])
+    )
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Users::AddUser(
+      $_POST['firstname'],
+      $_POST['lastname'],
+      $_POST['email'],
+      $_POST['password'],
+      $_POST['confirmpassword'],
+      $_POST['role']
+    );
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
     break;
   case 'delete-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
@@ -227,6 +347,20 @@ switch ($action) {
       reply(StatusCodes::Error, 'Invalid parameters.');
 
     $data = Users::DeleteUser($_POST['uid']);
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'delete-announcement':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Announcements::DeleteAnnouncement($_POST['id']);
 
     if ($data[0] === NULL)
       reply(StatusCodes::Error, $data[1]);

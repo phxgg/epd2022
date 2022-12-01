@@ -1,5 +1,5 @@
 <?php
-error_reporting(0); // Disable error reporting for production.
+error_reporting(E_ALL); // Disable error reporting for production.
 
 date_default_timezone_set('Europe/Athens');
 
@@ -19,6 +19,7 @@ require_once 'classes/status-codes.class.php';
 require_once 'classes/misc.class.php';
 require_once 'classes/account.class.php';
 require_once 'classes/users.class.php';
+require_once 'classes/announcements.class.php';
 
 // Log server side errors.
 function LogError($e)

@@ -9,7 +9,7 @@ class Pages
     ],
     'login' => [
       'title' => 'Σύνδεση',
-      'subtitle' => 'Into a new paradise',
+      'subtitle' => 'Σύνδεση στο σύστημα',
       'iconClass' => 'bi bi-box-arrow-in-right text-primary'
     ],
     'register' => [
@@ -22,55 +22,20 @@ class Pages
       'subtitle' => 'Ο λογαριασμός μου',
       'iconClass' => 'bi bi-gear-wide-connected text-dark'
     ],
-    'professional' => [
-      'title' => 'Επαγγελματίας',
-      'subtitle' => 'Διαχείρηση των καταστημάτων μου',
-      'iconClass' => 'bi bi-patch-check text-primary'
-    ],
-    'edit-description' => [
-      'title' => 'Επεξεργασία περιγραφής',
-      'subtitle' => 'Επεξεργασία περιγραφής',
-      'iconClass' => 'bi bi-pencil-square text-primary'
+    'announcements' => [
+      'title' => 'Ανακοινώσεις',
+      'subtitle' => 'Ανακοινώσεις σχετικές με το σύστημα',
+      'iconClass' => 'bi bi-bullhorn text-primary'
     ],
     'contact' => [
       'title' => 'Επικοινωνία',
-      'subtitle' => 'Πες μας ένα γεια!',
-      'iconClass' => 'bi bi-chat-dots text-primary'
+      'subtitle' => 'Ανατρέξτε στην ομάδα μας',
+      'iconClass' => 'bi bi-chat-dots text-dark'
     ],
-    'categories' => [
-      'title' => 'Κατηγορίες',
-      'subtitle' => 'Κατηγορίες εστίασης',
-      'iconClass' => 'bi bi-tags'
-    ],
-    'view-category' => [
-      'title' => 'Προβολή κατηγορίας',
-      'subtitle' => 'Προβολή κατηγορίας',
-      'iconClass' => 'bi bi-tags'
-    ],
-    'view-store' => [
-      'title' => 'Προβολή καταστήματος',
-      'subtitle' => 'Προβολή καταστήματος',
-      'iconClass' => 'bi bi-shop'
-    ],
-    'my-favorites' => [
-      'title' => 'Αγαπημένα',
-      'subtitle' => 'Η λίστα με τα αγαπημένα μου',
-      'iconClass' => 'bi bi-balloon-heart-fill text-danger'
-    ],
-    'my-bookings' => [
-      'title' => 'Κρατήσεις',
-      'subtitle' => 'Η λίστα με τις κρατήσεις που έχω κάνει',
-      'iconClass' => 'bi bi-bookmark-star text-success'
-    ],
-    'book' => [
-      'title' => 'Κράτηση',
-      'subtitle' => 'Κάνε μία κράτηση',
-      'iconClass' => 'bi bi-bookmark-star'
-    ],
-    'search' => [
-      'title' => 'Αναζήτηση',
-      'subtitle' => 'Βρες ένα κατάστημα',
-      'iconClass' => 'bi bi-search'
+    'manage-users' => [
+      'title' => 'Διαχείριση χρηστών',
+      'subtitle' => 'Διαχείριση χρηστών',
+      'iconClass' => 'bi bi-people text-deep-purple'
     ],
   ];
 
