@@ -19,6 +19,9 @@ class Announcements extends CMS
     
     $announcementsArr = [];
     while ($announcement = $announcements->fetch_object()) {
+      // $parser->parse($announcement->body);
+      $announcement->body = nl2br(htmlentities($announcement->body));
+      $announcement->display_edit_button = Account::IsTutor();
       $announcementsArr[] = $announcement;
     }
 

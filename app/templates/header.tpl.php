@@ -76,13 +76,25 @@ function active($page)
           <li>
             <a href="?page=index" <?= active('index'); ?>>
               <i class="bi bi-grid"></i>
-              Home
+              Αρχική
             </a>
           </li>
           <li>
             <a href="?page=announcements" <?= active('announcements'); ?>>
               <i class="bi bi-tags"></i>
               Announcements
+            </a>
+          </li>
+          <li>
+            <a href="?page=documents" <?= active('documents'); ?>>
+              <i class="bi bi-file-earmark-pdf"></i>
+              Έγγραφα
+            </a>
+          </li>
+          <li>
+            <a href="?page=projects" <?= active('projects'); ?>>
+              <i class="bi bi-server"></i>
+              Εργασίες
             </a>
           </li>
           <?php if (Account::IsTutor()) : ?>

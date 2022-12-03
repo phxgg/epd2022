@@ -37,6 +37,16 @@ class Pages
       'subtitle' => 'Διαχείριση χρηστών',
       'iconClass' => 'bi bi-people text-deep-purple'
     ],
+    'projects' => [
+      'title' => 'Εργασίες',
+      'subtitle' => 'Εργασίες',
+      'iconClass' => 'bi bi-server text-primary'
+    ],
+    'documents' => [
+      'title' => 'Έγγραφα',
+      'subtitle' => 'Έγγραφα',
+      'iconClass' => 'bi bi-file-earmark-pdf text-primary'
+    ],
   ];
 
   // public static $tutor = [

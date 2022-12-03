@@ -349,6 +349,12 @@ var app = {
             break;
           case 2:
             $('#add-user-result').html(`<div class="alert alert-success">${res.data}</div>`);
+
+            $('#firstname').val('');
+            $('#lastname').val('');
+            $('#email').val('');
+            $('#password').val('');
+            $('#confirmpassword').val('');
             break;
         }
       }
@@ -406,6 +412,7 @@ var app = {
             break;
           case 2:
             $('#edit-user-result').html(`<div class="alert alert-success">${res.data}</div>`);
+            app.LoadUsers();
             break;
         }
       }
@@ -467,9 +474,12 @@ var app = {
                 <div class="card">
                   <div class="card-body">
                     <h5 class="card-title">
-                      <a href="#${announcement.id}" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editAnnouncementModal" onclick="javascript:app._editAnnouncementModal(${announcement.id});">
-                        <i class="bi bi-pencil-square"></i>
-                      </a>
+                      ${announcement.display_edit_button ? `
+                        <a href="#${announcement.id}" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editAnnouncementModal" onclick="javascript:app._editAnnouncementModal(${announcement.id});">
+                          <i class="bi bi-pencil-square"></i>
+                        </a>
+                      ` : ''}
+                      ${announcement.is_project == 1 ? '<span class="badge bg-primary">Εργασία</span>' : ''}
                       ${announcement.title}
                     </h5>
                     <h6 class="card-subtitle mb-2 text-muted">
@@ -539,6 +549,12 @@ var app = {
             break;
           case 2:
             $('#add-announcement-result').html(`<div class="alert alert-success">${res.data}</div>`);
+
+            $('#add-title').val('');
+            $('#add-body').val('');
+            $('#add-is-project').prop('checked', false);
+
+            app.LoadAnnouncements();
             break;
         }
       }
@@ -593,6 +609,7 @@ var app = {
             break;
           case 2:
             $('#edit-announcement-result').html(`<div class="alert alert-success">${res.data}</div>`);
+            app.LoadAnnouncements();
             break;
         }
       }

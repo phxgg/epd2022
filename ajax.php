@@ -21,6 +21,7 @@ $allowed_actions = [
   'load-users',
   'load-announcements',
   'load-announcement',
+  'load-documents',
 
   'change-email',
   'change-password',
@@ -32,12 +33,11 @@ $allowed_actions = [
   'edit-user',
   'edit-announcement',
 
-  'delete-documents',
+  'delete-document',
   'delete-user',
   'delete-announcement',
 
-  'view-documents',
-  'upload-documents',
+  'upload-document',
 ];
 
 // Get current action
@@ -236,51 +236,44 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data[1]);
     break;
-    // case 'view-documents':
-    //   if (!Account::IsLoggedIn())
-    //     reply(StatusCodes::Error, 'You cannot access this.');
+  case 'load-documents':
+    if (!Account::IsLoggedIn())
+      reply(StatusCodes::Error, 'You cannot access this.');
 
-    //   if (!isset($_POST['sid']))
-    //     reply(StatusCodes::Error, 'Invalid parameters.');
+    $data = Documents::LoadAllDocuments();
 
-    //   $data = Stores::ViewDocuments($_POST['sid']);
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
 
-    //   if ($data[0] === NULL)
-    //     reply(StatusCodes::Error, $data[1]);
-    //   elseif ($data[0] == 'info')
-    //     reply(StatusCodes::Info, $data[1]);
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'delete-document':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You cannot access this.');
 
-    //   reply(StatusCodes::OK, $data[1]);
-    //   break;
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
 
-    // case 'delete-documents':
-    //   if (!Account::IsLoggedIn() || !Account::IsTutor())
-    //     reply(StatusCodes::Error, 'You cannot access this.');
+    $data = Documents::DeleteDocument($_POST['id']);
 
-    //   if (!isset($_POST['sid']))
-    //     reply(StatusCodes::Error, 'Invalid parameters.');
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
 
-    //   $data = Stores::DeleteDocuments($_POST['sid']);
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'upload-document':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You cannot access this.');
 
-    //   if ($data[0] === NULL)
-    //     reply(StatusCodes::Error, $data[1]);
+    if (!isset($_FILES['document']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
 
-    //   reply(StatusCodes::OK, $data[1]);
-    //   break;
+    $data = Documents::UploadDocument($_FILES['document'], $_POST['description']);
 
-    // case 'upload-documents':
-    //   if (!Account::IsLoggedIn() || !Account::IsTutor())
-    //     reply(StatusCodes::Error, 'You cannot access this.');
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
 
-    //   if (!isset($_FILES['document']))
-    //     reply(StatusCodes::Error, 'Invalid parameters.');
-
-    //   $data = Stores::UploadDocuments($_FILES['document']);
-
-    //   if ($data[0] === NULL)
-    //     reply(StatusCodes::Error, $data[1]);
-
-    //   reply(StatusCodes::OK, $data[1]);
+    reply(StatusCodes::OK, $data[1]);
     break;
   case 'edit-announcement':
     if (!Account::IsLoggedIn() || !Account::IsTutor())

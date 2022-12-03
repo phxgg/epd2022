@@ -21,6 +21,12 @@ require_once 'classes/account.class.php';
 require_once 'classes/users.class.php';
 require_once 'classes/announcements.class.php';
 
+// JBBCode
+require_once 'lib/JBBCode/Parser.php';
+
+$parser = new JBBCode\Parser();
+$parser->addCodeDefinitionSet(new JBBCode\DefaultCodeDefinitionSet());
+
 // Log server side errors.
 function LogError($e)
 {
