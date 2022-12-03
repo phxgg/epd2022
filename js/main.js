@@ -462,7 +462,7 @@ var app = {
       success: function (res) {
         switch (res.status) {
           case 0:
-            // $('#announcements-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
+            $('#announcements-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
             break;
           case 1:
             break;
@@ -483,7 +483,7 @@ var app = {
                       ${announcement.title}
                     </h5>
                     <h6 class="card-subtitle mb-2 text-muted">
-                      Ημερομηνία: ${announcement.creation_date}
+                      Ημερομηνία: ${new Date(announcement.creation_date).toLocaleDateString('el-GR', dateOptions)}
                     </h6>
                     <p class="card-text">
                       ${announcement.body}
@@ -814,7 +814,6 @@ var app = {
           case 1:
             break;
           case 2:
-            console.log(res);
             result = '';
 
             res.data.forEach(project => {
@@ -833,10 +832,17 @@ var app = {
                     <p class="card-text">
                       ${project.body}
                       <hr />
+                      Προθεσμία:
+                      ${new Date(project.deadline_date) < Date.now() ? `
+                        <span class="badge bg-secondary">Έχει λείξει</span>
+                      ` : `
+                      <span class="badge bg-primary">${new Date(project.deadline_date).toLocaleDateString('el-GR', dateOptions)}</span>
+                      `}
+                      <hr />
                       ${project.document[0] === 'ok' ? `
                       <a class="btn btn-primary btn-sm" href="download-document.php?id=${project.document[1].id}">
                         <i class="bi bi-download"></i>
-                        Λήψη
+                        Λήψη εκφώνησης
                       </a>
                       ` : `
                       <span class="badge bg-danger">Δεν υπάρχει αρχείο</span>
@@ -847,7 +853,6 @@ var app = {
                         Ανέβηκε στις ${project.creation_date}
                       </small>
                     </p>
-                    ${document.project_id !== null ? `<a href="?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
                   </div>
                 </div>
                 <br />
@@ -970,5 +975,6 @@ function removeFromArray(arr, el) {
   return arr;
 }
 
-// Week days to string
+// Dates
 const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };

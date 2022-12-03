@@ -1,19 +1,13 @@
 # epd2022
 
-### Admin Default Credentials:
+### Tutor Default Credentials:
 
-Username `admin`
+Email `admin@admin.com`
 
 Password `admin`
 
-### Professional Default Credentials
+### Student Default Credentials
 
-Username `prof`
+Email `student@student.com`
 
-Password `prof`
-
-### User Default Credentials
-
-Username `user`
-
-Password `user`
+Password `student`

@@ -83,7 +83,7 @@ class Projects extends CMS
       'INSERT INTO `projects` (`title`, `body`, `deadline_date`) VALUES ("%s", "%s", "%s")',
       $title,
       $body,
-      $deadline
+      date("Y-m-d", strtotime($deadline))
     ));
 
     if (!$insert)
