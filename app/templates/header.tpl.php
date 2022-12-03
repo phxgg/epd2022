@@ -1,3 +1,5 @@
+<?php if (!defined('ACCESS')) exit; ?>
+
 <?php
 function active($page)
 {

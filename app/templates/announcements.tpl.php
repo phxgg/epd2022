@@ -1,3 +1,5 @@
+<?php if (!defined('ACCESS')) exit; ?>
+
 <?= Account::LoginRequired(); ?>
 
 <h1><?= $title; ?></h1>

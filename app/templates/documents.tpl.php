@@ -1,3 +1,5 @@
+<?php if (!defined('ACCESS')) exit; ?>
+
 <?= Account::LoginRequired(); ?>
 
 <h1><?= $title; ?></h1>
@@ -18,7 +20,7 @@
       </div>
     </div>
 
-    <div id="documents-result"></div>
+    <div id="document-result"></div>
   </div>
 </div>
 
@@ -35,7 +37,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="form-upload-documents" enctype="multipart/form-data">
+        <form id="form-upload-document" enctype="multipart/form-data">
           <div id="upload-document-result"></div>
 
           <div class="mb-3">
@@ -67,6 +69,26 @@
     </div>
   </div>
 </div>
+
+<!-- Document modal -->
+<div class="modal fade" id="documentModal" aria-labelledby="modal-document-title" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal-document-title">Έγγραφο</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" style="word-break: break-all;">
+        <div id="modal-document-body"></div>
+      </div>
+      <div class="modal-footer">
+        <div id="modal-document-footer"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="init"></div>
 
 <script type="text/javascript">
   $(document).ready(function() {

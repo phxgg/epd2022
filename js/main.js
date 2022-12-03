@@ -62,6 +62,93 @@ var app = {
     });
   },
 
+  _documentModal: function (id) {
+    $('#delete-document-result').html('');
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: {
+        'action': 'load-document',
+        'id': id
+      },
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#modal-document-body').html(`<div class="alert alert-danger">${res.data}</div>`);
+            break;
+          case 1:
+            break;
+          case 2:
+            var document = res.data;
+
+            var result = '';
+
+            result += `
+            <form id="modal-form-upload-document" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="modal-upload-document" class="form-label">
+                  <i class="bi bi-file-earmark-richtext"></i>
+                  Αλλαγή αρχείου
+                </label>
+                <input class="form-control" type="file" id="modal-upload-document">
+              </div>
+
+              <div class="form-floating mb-3">
+                <textarea style="height: 200px;" name="modal-upload-description" class="form-control" id="modal-upload-description" placeholder="Κείμενο" aria-label="Κείμενο" aria-describedby="modal-description-add-addon">${document.description}</textarea>
+                <label for="modal-upload-description" class="form-label">
+                  Περιγραφή
+                  <span class="text-danger">*</span>
+                </label>
+              </div>
+            </form>
+            
+            <a href="download-document.php?id=${document.id}" class="text-decoration-none">
+              <div class="card border-info" style="width: 18rem;">
+                <div class="card-body">
+                  <h5 class="card-title text-dark">
+                    <i class="bi bi-file-earmark-richtext"></i>
+                    ${document.filename}.${document.extension}
+                  </h5>
+                  <h6 class="card-subtitle mb-2 text-muted">Λήψη</h6>
+                </div>
+              </div>
+            </a>
+            `;
+
+            $('#modal-document-body').html(result);
+
+            $('#modal-document-footer').html(`
+            <span id="modal-delete-document-result" class="text-muted"></span>
+
+            <button type="button" class="btn btn-purple btn-sm" id="modal-upload-document-btn">
+              <i class="bi bi-send"></i>
+              Υποβολή
+            </button>
+
+            <button type="button" class="btn btn-outline-danger btn-sm" id="modal-delete-document-btn">
+              <i class="bi bi-trash3"></i>
+              Διαγραφή
+            </button>
+            `);
+
+            $('#init').html(`
+            <script type="text/javascript">
+              $('#modal-upload-document-btn').click(function() {
+                app.UploadDocumentModal();
+              });
+
+              $('#modal-delete-document-btn').click(function() {
+                app.DeleteDocument(${document.id});
+              });
+            </script>
+            `);
+            break;
+        }
+      }
+    });
+  },
+
   ChangeEmail: function () {
     const resetBtn = () => {
       $('#change-email-btn').removeClass('disabled');
@@ -661,7 +748,7 @@ var app = {
 
         switch (res.status) {
           case 0:
-            $('#documents-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
+            $('#document-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
             break;
           case 1:
             break;
@@ -674,9 +761,11 @@ var app = {
                   <div class="card-body">
                     <h5 class="card-title">
                       ${document.display_edit_button ? `
-                        <a href="#${document.id}" class="btn btn-danger btn-sm" onclick="javascript:app.DeleteDocument(${document.id});">
-                          <i class="bi bi-trash3"></i>
+                      <span data-bs-toggle="modal" data-bs-target="#documentModal">
+                        <a href="#${document.id}" class="btn btn-success btn-sm" onclick="javascript:app._documentModal(${document.id});">
+                          <i class="bi bi-pencil-square"></i>
                         </a>
+                      </span>
                       ` : ''}
                       ${document.project_id !== null ? `<span class="badge bg-primary">Εργασία ${document.project_id}</span>` : ''}
                       ${document.filename}.${document.extension}
@@ -702,7 +791,7 @@ var app = {
               `;
             });
 
-            $('#documents-result').html(result);
+            $('#document-result').html(result);
 
             break;
         }

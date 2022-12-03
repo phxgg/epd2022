@@ -1,3 +1,5 @@
+<?php if (!defined('ACCESS')) exit; ?>
+
 <?= Account::TutorRequired(); ?>
 
 <div class="card text-dark mb-3">

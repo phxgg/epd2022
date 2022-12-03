@@ -22,6 +22,7 @@ $allowed_actions = [
   'load-announcements',
   'load-announcement',
   'load-documents',
+  'load-document',
   'load-projects',
 
   'change-email',
@@ -271,6 +272,20 @@ switch ($action) {
       reply(StatusCodes::Error, NULL);
 
     reply(StatusCodes::OK, $data);
+    break;
+  case 'load-document':
+    if (!Account::IsLoggedIn())
+      reply(StatusCodes::Error, 'You cannot access this.');
+
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Documents::LoadDocument($_POST['id']);
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
     break;
   case 'load-projects':
     if (!Account::IsLoggedIn())

@@ -56,17 +56,17 @@ class Misc extends CMS
     return true;
   }
 
-  public static function Contact($email, $message)
+  public static function Contact($name, $email, $message)
   {
-    if (self::MultipleEmpty($email, $message))
+    if (self::MultipleEmpty($name, $email, $message))
       return self::Error('Παρακαλώ συμπληρώστε όλα τα πεδία.');
 
     if (!self::IsValidEmail($email))
       return self::Error('Το email που δώσατε δεν είναι έγκυρο.');
 
-    $message = wordwrap($message, 300); // use wordwrap() if lines are longer than 300 characters
+    $message = wordwrap($message, 500); // use wordwrap() if lines are longer than 300 characters
 
-    mail('contact@example.com', 'Contact Page', $message, "From: $email");
+    mail(CONTACT_EMAIL, 'Contact Page', "Name: $name\nFrom email: $email\n\n$message", "From: $email");
     return self::Success('Το μήνυμα σας στάλθηκε επιτυχώς! Θα επικοινωνήσουμε μαζί σας το συντομότερο.');
     
     // return self::Info('Under construction.');

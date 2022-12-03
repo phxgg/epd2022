@@ -1,3 +1,5 @@
+<?php if (!defined('ACCESS')) exit; ?>
+
 <?php
 // Disable registration
 header('Location: ?page=index');

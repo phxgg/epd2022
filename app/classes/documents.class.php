@@ -44,6 +44,29 @@ class Documents extends CMS
     return ['ok', $fetch];
   }
 
+  public static function LoadDocument($id)
+  {
+    global $mysqli;
+
+    $id = intval($id);
+
+    $fetch = $mysqli->query(sprintf(
+      'SELECT
+        `id`,
+        `description`,
+        `filename`,
+        `extension`,
+        `project_id`,
+        `creation_date`
+      FROM documents WHERE `id` = %d', $id));
+    if ($fetch->num_rows == 0)
+      return [NULL, 'Δεν βρέθηκε έγγραφο.'];
+
+    $fetch = $fetch->fetch_object();
+
+    return ['ok', $fetch];
+  }
+
   public static function DeleteDocument($id)
   {
     global $mysqli;
