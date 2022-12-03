@@ -84,7 +84,7 @@ function active($page)
           <li>
             <a href="?page=announcements" <?= active('announcements'); ?>>
               <i class="bi bi-tags"></i>
-              Announcements
+              Ανακοινώσεις
             </a>
           </li>
           <li>
@@ -146,13 +146,16 @@ function active($page)
           <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" class="btn border-0 bg-dark" id="sidebarCollapse">
             <i class="bi bi-distribute-vertical text-white"></i>
           </a>
+          <a href="/?page=index" class="d-flex align-items-center px-2 link-dark text-decoration-none">
+            <span class="fs-4"><?= SITE_NAME; ?></span>
+          </a>
         </div>
 
         <div class="d-flex">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="btn btn-danger" href="/?page=index">
-                <i class="bi bi-house-door-fill"></i>
+              <a class="btn btn-outline-info" href="/?page=contact">
+              <i class="bi bi-chat-dots"></i>
               </a>
             </li>
           </ul>

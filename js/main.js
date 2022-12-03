@@ -12,7 +12,7 @@ var app = {
       success: function (res) {
         switch (res.status) {
           case 0:
-            $('#edit-user-result').html('<div class="alert alert-danger">Something went wrong.</div>');
+            $('#edit-user-result').html('<div class="alert alert-danger">Κάτι πήγε στραβά.</div>');
             break;
           case 1:
             break;
@@ -44,7 +44,7 @@ var app = {
       success: function (res) {
         switch (res.status) {
           case 0:
-            $('#edit-announcement-result').html('<div class="alert alert-danger">Something went wrong.</div>');
+            $('#edit-announcement-result').html('<div class="alert alert-danger">Κάτι πήγε στραβά.</div>');
             break;
           case 1:
             break;
@@ -55,6 +55,37 @@ var app = {
             $('#edit-title').val(announcement.title);
             $('#edit-body').val(announcement.body);
             $('#edit-is-project').prop('checked', announcement.is_project == 1);
+
+            break;
+        }
+      }
+    });
+  },
+
+  _editProjectModal: function (id) {
+    $('#edit-project-result').html('');
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: {
+        'action': 'load-project',
+        'id': id
+      },
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#edit-project-result').html('<div class="alert alert-danger">Κάτι πήγε στραβά.</div>');
+            break;
+          case 1:
+            break;
+          case 2:
+            var project = res.data;
+
+            $('#edit-id').val(project.id);
+            $('#edit-title').val(project.title);
+            $('#edit-body').val(project.body);
+            $('#edit-deadline-date').val(project.deadline_date);
 
             break;
         }
@@ -85,6 +116,10 @@ var app = {
             var result = '';
 
             result += `
+            <input type="hidden" id="modal-edit-document-id" value="${document.id}">
+
+            <div id="modal-edit-document-result"></div>
+
             <form id="modal-form-upload-document" enctype="multipart/form-data">
               <div class="mb-3">
                 <label for="modal-upload-document" class="form-label">
@@ -92,11 +127,12 @@ var app = {
                   Αλλαγή αρχείου
                 </label>
                 <input class="form-control" type="file" id="modal-upload-document">
+                <small class="form-text text-muted">Μέγιστο μέγεθος αρχείου: 1MB</small>
               </div>
 
               <div class="form-floating mb-3">
-                <textarea style="height: 200px;" name="modal-upload-description" class="form-control" id="modal-upload-description" placeholder="Κείμενο" aria-label="Κείμενο" aria-describedby="modal-description-add-addon">${document.description}</textarea>
-                <label for="modal-upload-description" class="form-label">
+                <textarea style="height: 200px;" name="modal-edit-description" class="form-control" id="modal-edit-description" placeholder="Κείμενο" aria-label="Κείμενο" aria-describedby="modal-description-edit-addon">${document.description}</textarea>
+                <label for="modal-edit-description" class="form-label">
                   Περιγραφή
                   <span class="text-danger">*</span>
                 </label>
@@ -121,21 +157,21 @@ var app = {
             $('#modal-document-footer').html(`
             <span id="modal-delete-document-result" class="text-muted"></span>
 
-            <button type="button" class="btn btn-purple btn-sm" id="modal-upload-document-btn">
-              <i class="bi bi-send"></i>
-              Υποβολή
-            </button>
-
-            <button type="button" class="btn btn-outline-danger btn-sm" id="modal-delete-document-btn">
+            <button type="button" class="btn btn-danger btn-sm" id="modal-delete-document-btn">
               <i class="bi bi-trash3"></i>
               Διαγραφή
+            </button>
+
+            <button type="button" class="btn btn-purple btn-sm" id="modal-edit-document-btn">
+              <i class="bi bi-send"></i>
+              Υποβολή
             </button>
             `);
 
             $('#init').html(`
             <script type="text/javascript">
-              $('#modal-upload-document-btn').click(function() {
-                app.UploadDocumentModal();
+              $('#modal-edit-document-btn').click(function() {
+                app.EditDocument();
               });
 
               $('#modal-delete-document-btn').click(function() {
@@ -857,6 +893,64 @@ var app = {
     });
   },
 
+  EditDocument: function () {
+    const resetBtn = () => {
+      $('#modal-edit-document-btn').removeClass('disabled');
+      $('#modal-edit-document-btn').html(`
+        <i class="bi bi-send"></i>
+        Υποβολή
+      `);
+    }
+
+    $('#modal-edit-document-btn').addClass('disabled');
+    $('#modal-edit-document-btn').html(`
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Working...
+    `);
+
+    var id = $('#modal-edit-document-id').val();
+    var document = $('#modal-upload-document').prop('files')[0] || null;
+    var description = $('#modal-edit-description').val();
+
+    var formData = new FormData();
+    formData.append('action', 'edit-document');
+    formData.append('id', id);
+    formData.append('document', document);
+    formData.append('description', description);
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#modal-edit-document-result').removeClass('alert-info');
+            $('#modal-edit-document-result').removeClass('alert-success');
+            $('#modal-edit-document-result').addClass('alert-danger');
+            $('#modal-edit-document-result').addClass('alert');
+            $('#modal-edit-document-result').html(res.data);
+            break;
+          case 1:
+            break;
+          case 2:
+            $('#modal-edit-document-result').removeClass('alert-info');
+            $('#modal-edit-document-result').removeClass('alert-danger');
+            $('#modal-edit-document-result').addClass('alert-success');
+            $('#modal-edit-document-result').addClass('alert');
+            $('#modal-edit-document-result').html(res.data);
+
+            location.reload();
+            break;
+        }
+
+        resetBtn();
+      }
+    });
+  },
+
   DeleteDocument: function (id) {
     if (confirm('Είσαι σίγουρος;') == true) {
       $.ajax({
@@ -911,8 +1005,8 @@ var app = {
                   <div class="card-body">
                     <h5 class="card-title">
                       ${project.display_edit_button ? `
-                      <a href="#${project.id}" class="btn btn-danger btn-sm" onclick="javascript:app.DeleteProject(${project.id});">
-                        <i class="bi bi-trash3"></i>
+                      <a href="#${project.id}" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editProjectModal" onclick="javascript:app._editProjectModal(${project.id});">
+                        <i class="bi bi-pencil-square"></i>
                       </a>
                       ` : ''}
                       <span class="badge bg-dark">${project.id}</span>
@@ -1018,8 +1112,64 @@ var app = {
     });
   },
 
-  DeleteProject: function (id) {
+  EditProject: function () {
+    const resetBtn = () => {
+      $('#edit-project-btn').removeClass('disabled');
+      $('#edit-project-btn').html(`
+        <i class="bi bi-pencil-square"></i>
+        Αποθήκευση
+      `);
+    }
+
+    $('#edit-project-btn').addClass('disabled');
+    $('#edit-project-btn').html(`
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Working...
+    `);
+
+    var id = $('#edit-id').val();
+    var title = $('#edit-title').val();
+    var body = $('#edit-body').val();
+    // var isProject = $('#edit-is-project').is(':checked') ? 1 : 0;
+
+    if (!title
+      || !body) {
+      $('#edit-project-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
+      resetBtn();
+      return;
+    }
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: {
+        'action': 'edit-project',
+        'id': id,
+        'title': title,
+        'body': body,
+      },
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#edit-project-result').html(`<div class="alert alert-danger">${res.data}</div>`);
+            break;
+          case 1:
+            break;
+          case 2:
+            $('#edit-project-result').html(`<div class="alert alert-success">${res.data}</div>`);
+            app.LoadProjects();
+            break;
+        }
+      }
+    });
+
+    resetBtn();
+  },
+
+  DeleteProject: function () {
     if (confirm('Είσαι σίγουρος;') == true) {
+      var id = $('#edit-id').val();
+
       $.ajax({
         type: 'post',
         url: 'ajax.php',

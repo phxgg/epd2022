@@ -2,13 +2,13 @@
 
 <?= Account::TutorRequired(); ?>
 
-<div class="card text-dark mb-3">
-  <div class="card-header">
-    <i class="<?= $iconClass; ?>"></i>
-    <?= $title; ?>
-  </div>
-  <div class="card-body">
+<h1>
+  <i class="<?= $iconClass; ?>"></i>
+  <?= $title; ?>
+</h1>
 
+<div class="card text-dark mb-3">
+  <div class="card-body">
     <button type="button" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addUserModal">
       <i class="bi bi-person-plus"></i>
       Προσθήκη χρήστη

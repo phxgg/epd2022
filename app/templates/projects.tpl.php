@@ -2,7 +2,10 @@
 
 <?= Account::LoginRequired(); ?>
 
-<h1><?= $title; ?></h1>
+<h1>
+  <i class="<?= $iconClass; ?>"></i>
+  <?= $title; ?>
+</h1>
 
 <div class="card text-dark mb-3">
   <div class="card-body">
@@ -119,12 +122,10 @@
             </label>
           </div>
 
-          <div class="form-check form-switch mb-3">
-            <input class="form-check-input" name="edit-is-project" id="edit-is-project" type="checkbox" value="">
-            <label class="form-check-label" for="edit-is-project">
-              Είναι ανακοίνωση εργασίας
-            </label>
-          </div>
+            <small class="text-muted">
+              <i class="bi bi-file-earmark-pdf"></i>
+              Για επεξεργασία του έγγραφου κατευθεινθείτε στα <a href="?page=documents" id="edit-document-link" target="_blank">έγγραφα</a>
+            </small>
 
         </form>
       </div>

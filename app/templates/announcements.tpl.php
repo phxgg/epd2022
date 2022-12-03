@@ -2,7 +2,10 @@
 
 <?= Account::LoginRequired(); ?>
 
-<h1><?= $title; ?></h1>
+<h1>
+  <i class="<?= $iconClass; ?>"></i>
+  <?= $title; ?>
+</h1>
 
 <div class="card text-dark mb-3">
   <div class="card-body">

@@ -26,6 +26,31 @@ class Users extends CMS
     return $usersArr;
   }
 
+  public static function GetTutors()
+  {
+    global $mysqli;
+
+    $tutors = $mysqli->query(
+      'SELECT
+        `id`,
+        `firstname`,
+        `lastname`,
+        `email`,
+        `creation_date`,
+        `role`
+      FROM `users` WHERE `role` = 1'
+    );
+    if ($tutors->num_rows == 0)
+      return NULL;
+    
+    $tutorsArr = [];
+    while ($tutor = $tutors->fetch_object()) {
+      $tutorsArr[] = $tutor;
+    }
+
+    return $tutorsArr;
+  }
+
   public static function Fetch($uid)
   {
     global $mysqli;

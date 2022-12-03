@@ -25,7 +25,7 @@ class Pages
     'announcements' => [
       'title' => 'Ανακοινώσεις',
       'subtitle' => 'Ανακοινώσεις σχετικές με το σύστημα',
-      'iconClass' => 'bi bi-bullhorn text-primary'
+      'iconClass' => 'bi bi-tags text-primary'
     ],
     'contact' => [
       'title' => 'Επικοινωνία',
@@ -48,27 +48,4 @@ class Pages
       'iconClass' => 'bi bi-file-earmark-pdf text-primary'
     ],
   ];
-
-  // public static $tutor = [
-  //   'dashboard' => [
-  //     'title' => 'Dashboard',
-  //     'subtitle' => 'Dashboard',
-  //     'iconClass' => 'bi bi-grid text-deep-purple'
-  //   ],
-  //   'manage-users' => [
-  //     'title' => 'Χρήστες',
-  //     'subtitle' => 'Διαχείρηση χρηστών',
-  //     'iconClass' => 'bi bi-people text-deep-purple'
-  //   ],
-  //   'manage-categories' => [
-  //     'title' => 'Κατηγορίες',
-  //     'subtitle' => 'Διαχείριση κατηγοριών',
-  //     'iconClass' => 'bi bi-tags text-deep-purple'
-  //   ],
-  //   'manage-stores' => [
-  //     'title' => 'Καταστήματα',
-  //     'subtitle' => 'Διαχείριση καταστημάτων',
-  //     'iconClass' => 'bi bi-shop text-deep-purple'
-  //   ],
-  // ];
 }

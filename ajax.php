@@ -24,6 +24,7 @@ $allowed_actions = [
   'load-documents',
   'load-document',
   'load-projects',
+  'load-project',
 
   'change-email',
   'change-password',
@@ -35,6 +36,8 @@ $allowed_actions = [
 
   'edit-user',
   'edit-announcement',
+  'edit-document',
+  'edit-project',
 
   'delete-document',
   'delete-project',
@@ -298,6 +301,45 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data);
     break;
+  case 'load-project':
+    if (!Account::IsLoggedIn())
+      reply(StatusCodes::Error, 'You cannot access this.');
+
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Projects::LoadProject($_POST['id']);
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'edit-project':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    // $isproject = 0;
+    // if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
+
+    if (
+      !isset($_POST['id'])
+      || !isset($_POST['title'])
+      || !isset($_POST['body'])
+    )
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Projects::EditProject(
+      $_POST['id'],
+      $_POST['title'],
+      $_POST['body']
+    );
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
   case 'delete-document':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You cannot access this.');
@@ -330,10 +372,31 @@ switch ($action) {
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You cannot access this.');
 
-    if (!isset($_FILES['document']))
+    if (!isset($_FILES['document']) || !isset($_POST['description']))
       reply(StatusCodes::Error, 'Invalid parameters.');
 
     $data = Documents::UploadDocument($_FILES['document'], $_POST['description'], NULL);
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'edit-document':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You cannot access this.');
+
+    if (!isset($_POST['id']) || !isset($_POST['description']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $file = NULL;
+    if (isset($_FILES['document'])) $file = $_FILES['document'];
+
+    $update_document = false;
+    if ($file && !empty($_FILES['document']) && $_FILES['document']['size'] > 0)
+      $update_document = true;
+
+    $data = Documents::EditDocument($_POST['id'], $update_document, $file, $_POST['description']);
 
     if ($data[0] === NULL)
       reply(StatusCodes::Error, $data[1]);
@@ -365,7 +428,6 @@ switch ($action) {
       reply(StatusCodes::Error, $data[1]);
 
     reply(StatusCodes::OK, $data[1]);
-    break;
     break;
   case 'add-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())

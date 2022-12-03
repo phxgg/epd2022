@@ -143,4 +143,86 @@ class Projects extends CMS
 
     return ['ok', 'Η εργασία διαγράφηκε επιτυχώς.'];
   }
+
+  public static function LoadProject($id)
+  {
+    global $mysqli;
+
+    $id = intval($id);
+
+    $fetch = $mysqli->query(sprintf(
+      'SELECT
+        `id`,
+        `title`,
+        `body`,
+        `deadline_date`,
+        `creation_date`
+      FROM projects WHERE `id` = %d',
+      $id
+    ));
+    if ($fetch->num_rows == 0)
+      return [NULL, 'Δεν βρέθηκε εργασία.'];
+
+    $fetch = $fetch->fetch_object();
+
+    return ['ok', $fetch];
+  }
+
+  public static function Fetch($id)
+  {
+    global $mysqli;
+
+    $id = intval($id);
+
+    $data = $mysqli->query(sprintf(
+      'SELECT
+        `id`,
+        `title`,
+        `body`,
+        `deadline_date`
+        `creation_date`
+      FROM `projects`
+      WHERE `id` = %d',
+      $id
+    ));
+
+    if (!$data || $data->num_rows == 0)
+      return NULL;
+
+    return $data->fetch_object();
+  }
+
+  public static function EditProject($id, $title, $body)
+  {
+    global $mysqli;
+
+    $id = intval($id);
+
+    if (Misc::MultipleEmpty($title, $body))
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
+
+    // Get current user info
+    $fetch = self::Fetch($id);
+    if (empty($fetch))
+      return [NULL, 'Δεν βρέθηκε εργασία.'];
+
+    $title = $mysqli->real_escape_string($title);
+    $body = $mysqli->real_escape_string($body);
+
+    $query = $mysqli->query(sprintf(
+      'UPDATE `projects`
+      SET
+        `title` = "%s",
+        `body` = "%s"
+      WHERE `id` = %d',
+      $title,
+      $body,
+      $id
+    ));
+    
+    if ($query)
+      return ['ok', 'Η εργασία ενημερώθηκε επιτυχώς.'];
+
+    return [NULL, 'Κάτι πήγε στραβά.'];
+  }
 }

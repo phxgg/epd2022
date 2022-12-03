@@ -1,6 +1,21 @@
 <?php
 class Documents extends CMS
 {
+  public static $allowed_extensions = [
+    'pdf',
+    'sql',
+    'doc',
+    'docx',
+    'odt',
+    'txt',
+    'rtf',
+    'xls',
+    'xlsx',
+    'zip',
+    'rar',
+    '7z'
+  ];
+
   public static function GetAllDocuments()
   {
     global $mysqli;
@@ -27,6 +42,19 @@ class Documents extends CMS
     }
 
     return $documentsArr;
+  }
+
+  public static function Exists($id)
+  {
+    global $mysqli;
+
+    $document = $mysqli->query(
+      'SELECT `id` FROM `documents` WHERE `id` = ' . $id
+    );
+    if ($document->num_rows == 0)
+      return false;
+
+    return true;
   }
 
   public static function GetDocument($id)
@@ -58,7 +86,9 @@ class Documents extends CMS
         `extension`,
         `project_id`,
         `creation_date`
-      FROM documents WHERE `id` = %d', $id));
+      FROM documents WHERE `id` = %d',
+      $id
+    ));
     if ($fetch->num_rows == 0)
       return [NULL, 'Δεν βρέθηκε έγγραφο.'];
 
@@ -92,13 +122,11 @@ class Documents extends CMS
   {
     global $mysqli;
 
-    $allowed_extensions = ['pdf', 'sql'];
-
     // Get filename without extension
     $filename = pathinfo($doc['name'], PATHINFO_FILENAME);
     $ext = pathinfo($doc['name'], PATHINFO_EXTENSION);
 
-    if (!in_array($ext, $allowed_extensions))
+    if (!in_array($ext, self::$allowed_extensions))
       return [NULL, "Μη έγκυρος τύπος αρχείου: <b>$ext</b>"];
 
     $description = $mysqli->real_escape_string($description);
@@ -109,8 +137,7 @@ class Documents extends CMS
       return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     // Check for file size
-    $max_file_size = 1048576;
-    if ($doc['size'] > $max_file_size) // 1mb = 1048576 bytes
+    if ($doc['size'] > MAX_FILE_SIZE)
       return [NULL, 'Το αρχείο είναι πολύ μεγάλο.'];
 
     // If projectId is not NULL, check if project exists
@@ -148,6 +175,69 @@ class Documents extends CMS
 
     if ($insert)
       return ['ok', 'Το έγγραφο αποστάλθηκε επιτυχώς.'];
+
+    return [NULL, 'Κάτι πήγε στραβά.'];
+  }
+
+  public static function EditDocument($id, $update_document, $doc, $description)
+  {
+    global $mysqli;
+
+    $id = intval($id);
+    if (!self::Exists($id))
+      return [NULL, 'Δεν υπάρχει αυτό το έγγραφο.'];
+
+    $description = $mysqli->real_escape_string($description);
+
+    if (empty($description))
+      return [NULL, 'Η περιγραφή είναι υποχρεωτική.'];
+
+    if ($update_document) {
+      // Get filename without extension
+      $filename = pathinfo($doc['name'], PATHINFO_FILENAME);
+      $ext = pathinfo($doc['name'], PATHINFO_EXTENSION);
+
+      if (!in_array($ext, self::$allowed_extensions))
+        return [NULL, "Μη έγκυρος τύπος αρχείου: <b>$ext</b>"];
+
+      $filename = $mysqli->real_escape_string($filename);
+      $ext = $mysqli->real_escape_string($ext);
+
+      if (Misc::MultipleEmpty($filename, $ext))
+        return [NULL, 'Το όνομα αρχείου και η επέκταση είναι υποχρεωτικά.'];
+
+      // Check for file size
+      if ($doc['size'] > MAX_FILE_SIZE)
+        return [NULL, 'Το αρχείο είναι πολύ μεγάλο.'];
+
+      // Update file in database
+      $doc = $mysqli->real_escape_string(file_get_contents($doc['tmp_name']));
+
+      $update = $mysqli->query(sprintf(
+        'UPDATE `documents` SET
+          `document` = "%s",
+          `description` = "%s",
+          `filename` = "%s",
+          `extension` = "%s"
+        WHERE `id` = %d',
+        $doc,
+        $description,
+        $filename,
+        $ext,
+        $id
+      ));
+    } else {
+      $update = $mysqli->query(sprintf(
+        'UPDATE `documents` SET
+          `description` = "%s"
+        WHERE `id` = %d',
+        $description,
+        $id
+      ));
+    }
+
+    if ($update)
+      return ['ok', 'Το έγγραφο ενημερώθηκε επιτυχώς.'];
 
     return [NULL, 'Κάτι πήγε στραβά.'];
   }

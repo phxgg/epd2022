@@ -63,7 +63,7 @@ class Announcements extends CMS
     if ($isproject != 0 && $isproject != 1) $isproject = 0;
 
     if (Misc::MultipleEmpty($title, $body))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     $title = $mysqli->real_escape_string($title);
     $body = $mysqli->real_escape_string($body);
@@ -87,9 +87,9 @@ class Announcements extends CMS
     }
     
     if ($insert)
-      return ['ok', 'Announcement added successfully'];
+      return ['ok', 'Η ανακοίνωση δημιουργήθηκε επιτυχώς.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   public static function EditAnnouncement($id, $title, $body)
@@ -101,12 +101,12 @@ class Announcements extends CMS
     // if ($isproject != 0 && $isproject != 1) $isproject = 0;
 
     if (Misc::MultipleEmpty($title, $body))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     // Get current user info
     $fetch = Announcements::Fetch($id);
     if (empty($fetch))
-      return [NULL, 'Announcement not found.'];
+      return [NULL, 'Δεν βρέθηκε ανακοίνωση.'];
 
     $title = $mysqli->real_escape_string($title);
     $body = $mysqli->real_escape_string($body);
@@ -124,9 +124,9 @@ class Announcements extends CMS
     ));
     
     if ($query)
-      return ['ok', 'Announcement edited successfully'];
+      return ['ok', 'Η ανακοίνωση ενημερώθηκε επιτυχώς.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   public static function DeleteAnnouncement($id)
@@ -135,15 +135,15 @@ class Announcements extends CMS
 
     $fetch = Announcements::Fetch($id);
     if (empty($fetch))
-      return [NULL, 'This announcement does not exist.'];
+      return [NULL, 'Δεν βρέθηκε ανακοίνωση.'];
     
     $id = intval($id);
 
     $query = $mysqli->query(sprintf('DELETE FROM `announcements` WHERE `id` = %d', $id));
 
     if ($query)
-      return ['ok', 'Deleted announcement!'];
+      return ['ok', 'Η ανακοίνωση διαγράφηκε επιτυχώς.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 }

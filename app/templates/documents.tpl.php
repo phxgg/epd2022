@@ -2,7 +2,10 @@
 
 <?= Account::LoginRequired(); ?>
 
-<h1><?= $title; ?></h1>
+<h1>
+  <i class="<?= $iconClass; ?>"></i>
+  <?= $title; ?>
+</h1>
 
 <div class="card text-dark mb-3">
   <div class="card-body">
@@ -23,7 +26,6 @@
     <div id="document-result"></div>
   </div>
 </div>
-
 
 <!-- Upload Document modal -->
 <div class="modal fade" id="addDocumentModal" tabindex="-1" aria-labelledby="addDocumentModalLabel" aria-hidden="true">
@@ -47,6 +49,7 @@
               <span class="text-danger">*</span>
             </label>
             <input class="form-control" type="file" id="upload-document">
+            <small class="form-text text-muted">Μέγιστο μέγεθος αρχείου: 1MB</small>
           </div>
 
           <div class="form-floating mb-3">
@@ -70,7 +73,7 @@
   </div>
 </div>
 
-<!-- Document modal -->
+<!-- Edit Document modal -->
 <div class="modal fade" id="documentModal" aria-labelledby="modal-document-title" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -3,11 +3,7 @@
   <footer class="footer text-center">
     <hr class="mydivider-center text-muted" />
     <small class="text-muted py-3">
-      <?= SITE_NAME; ?> &copy; 2022<br />
-      <a href="/?page=contact" class="text-decoration-none">
-        <i class="bi bi-chat-dots"></i>
-        Επικοινωνία
-      </a>
+      <?= SITE_NAME; ?> &copy; 2022
     </small>
   </footer>
   
