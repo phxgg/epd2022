@@ -11,3 +11,8 @@ Password `admin`
 Email `student@student.com`
 
 Password `student`
+
+## ToDo:
+
+- [ ] Create the `contact` page.
+- [ ] Add content in the `index` page.
