@@ -22,18 +22,21 @@ $allowed_actions = [
   'load-announcements',
   'load-announcement',
   'load-documents',
+  'load-projects',
 
   'change-email',
   'change-password',
-  'register',
+  // 'register',
 
   'add-user',
   'add-announcement',
+  'add-project',
 
   'edit-user',
   'edit-announcement',
 
   'delete-document',
+  'delete-project',
   'delete-user',
   'delete-announcement',
 
@@ -188,9 +191,6 @@ switch ($action) {
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You are not a tutor.');
 
-    $isproject = 0;
-    if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
-
     if (
       !isset($_POST['title'])
       || !isset($_POST['body'])
@@ -200,7 +200,32 @@ switch ($action) {
     $data = Announcements::AddAnnouncement(
       $_POST['title'],
       $_POST['body'],
-      $isproject
+      0,
+      NULL
+    );
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
+  case 'add-project':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You are not a tutor.');
+
+    if (
+      !isset($_POST['title'])
+      || !isset($_POST['body'])
+      || !isset($_POST['deadline'])
+      || !isset($_FILES['document'])
+    )
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Projects::AddProject(
+      $_POST['title'],
+      $_POST['body'],
+      $_POST['deadline'],
+      $_FILES['document']
     );
 
     if ($data[0] === NULL)
@@ -238,14 +263,25 @@ switch ($action) {
     break;
   case 'load-documents':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'You cannot access this.');
+      reply(StatusCodes::Error, 'Not logged in.');
 
-    $data = Documents::LoadAllDocuments();
+    $data = Documents::GetAllDocuments();
 
-    if ($data[0] === NULL)
-      reply(StatusCodes::Error, $data[1]);
+    if ($data === NULL)
+      reply(StatusCodes::Error, NULL);
 
-    reply(StatusCodes::OK, $data[1]);
+    reply(StatusCodes::OK, $data);
+    break;
+  case 'load-projects':
+    if (!Account::IsLoggedIn())
+      reply(StatusCodes::Error, 'Not logged in.');
+
+    $data = Projects::GetAllProjects();
+
+    if ($data === NULL)
+      reply(StatusCodes::Error, NULL);
+
+    reply(StatusCodes::OK, $data);
     break;
   case 'delete-document':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
@@ -261,6 +297,20 @@ switch ($action) {
 
     reply(StatusCodes::OK, $data[1]);
     break;
+  case 'delete-project':
+    if (!Account::IsLoggedIn() || !Account::IsTutor())
+      reply(StatusCodes::Error, 'You cannot access this.');
+
+    if (!isset($_POST['id']))
+      reply(StatusCodes::Error, 'Invalid parameters.');
+
+    $data = Projects::DeleteProject($_POST['id']);
+
+    if ($data[0] === NULL)
+      reply(StatusCodes::Error, $data[1]);
+
+    reply(StatusCodes::OK, $data[1]);
+    break;
   case 'upload-document':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You cannot access this.');
@@ -268,7 +318,7 @@ switch ($action) {
     if (!isset($_FILES['document']))
       reply(StatusCodes::Error, 'Invalid parameters.');
 
-    $data = Documents::UploadDocument($_FILES['document'], $_POST['description']);
+    $data = Documents::UploadDocument($_FILES['document'], $_POST['description'], NULL);
 
     if ($data[0] === NULL)
       reply(StatusCodes::Error, $data[1]);
@@ -279,8 +329,8 @@ switch ($action) {
     if (!Account::IsLoggedIn() || !Account::IsTutor())
       reply(StatusCodes::Error, 'You are not a tutor.');
 
-    $isproject = 0;
-    if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
+    // $isproject = 0;
+    // if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
 
     if (
       !isset($_POST['id'])
@@ -292,8 +342,8 @@ switch ($action) {
     $data = Announcements::EditAnnouncement(
       $_POST['id'],
       $_POST['title'],
-      $_POST['body'],
-      $isproject
+      $_POST['body']
+      // $isproject
     );
 
     if ($data[0] === NULL)

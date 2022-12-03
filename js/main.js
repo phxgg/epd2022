@@ -479,11 +479,11 @@ var app = {
                           <i class="bi bi-pencil-square"></i>
                         </a>
                       ` : ''}
-                      ${announcement.is_project == 1 ? '<span class="badge bg-primary">Εργασία</span>' : ''}
+                      ${announcement.is_project == 1 ? `<span class="badge bg-primary">Εργασία ${announcement.projectId}</span>` : ''}
                       ${announcement.title}
                     </h5>
                     <h6 class="card-subtitle mb-2 text-muted">
-                      ${announcement.creation_date}
+                      Ημερομηνία: ${announcement.creation_date}
                     </h6>
                     <p class="card-text">
                       ${announcement.body}
@@ -522,7 +522,7 @@ var app = {
 
     var title = $('#add-title').val();
     var body = $('#add-body').val();
-    var isProject = ($('#add-is-project').is(':checked')) ? 1 : 0;
+    // var isProject = ($('#add-is-project').is(':checked')) ? 1 : 0;
 
     if (!title
       || !body) {
@@ -538,7 +538,7 @@ var app = {
         'action': 'add-announcement',
         'title': title,
         'body': body,
-        'isproject': isProject
+        // 'isproject': isProject
       },
       success: function (res) {
         switch (res.status) {
@@ -581,7 +581,7 @@ var app = {
     var id = $('#edit-id').val();
     var title = $('#edit-title').val();
     var body = $('#edit-body').val();
-    var isProject = $('#edit-is-project').is(':checked') ? 1 : 0;
+    // var isProject = $('#edit-is-project').is(':checked') ? 1 : 0;
 
     if (!title
       || !body) {
@@ -598,7 +598,7 @@ var app = {
         'id': id,
         'title': title,
         'body': body,
-        'isproject': isProject,
+        // 'isproject': isProject,
       },
       success: function (res) {
         switch (res.status) {
@@ -646,6 +646,311 @@ var app = {
       return;
     }
   },
+
+  LoadDocuments: function () {
+    $('#loading').show();
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: {
+        'action': 'load-documents'
+      },
+      success: function (res) {
+        console.log(res);
+
+        switch (res.status) {
+          case 0:
+            $('#documents-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
+            break;
+          case 1:
+            break;
+          case 2:
+            result = '';
+
+            res.data.forEach(document => {
+              result += `
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      ${document.display_edit_button ? `
+                        <a href="#${document.id}" class="btn btn-danger btn-sm" onclick="javascript:app.DeleteDocument(${document.id});">
+                          <i class="bi bi-trash3"></i>
+                        </a>
+                      ` : ''}
+                      ${document.project_id !== null ? `<span class="badge bg-primary">Εργασία ${document.project_id}</span>` : ''}
+                      ${document.filename}.${document.extension}
+                    </h5>
+                    <p class="card-text">
+                      ${document.description}
+                      <hr />
+
+                      <a class="btn btn-primary btn-sm" href="download-document.php?id=${document.id}">
+                        <i class="bi bi-download"></i>
+                        Λήψη
+                      </a>
+                      <br />
+
+                      <small class="text-muted ${document.display_edit_button ? 'text-end' : ''}">
+                        Ανέβηκε στις ${document.creation_date}
+                      </small>
+                    </p>
+                    ${document.project_id !== null ? `<a href="?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
+                  </div>
+                </div>
+                <br />
+              `;
+            });
+
+            $('#documents-result').html(result);
+
+            break;
+        }
+      }
+    });
+
+    $('#loading').hide();
+  },
+
+  UploadDocument: function () {
+    const resetBtn = () => {
+      $('#upload-document-btn').removeClass('disabled');
+      $('#upload-document-btn').html(`
+        <i class="bi bi-send"></i>
+        Προσθήκη
+      `);
+    }
+
+    $('#upload-document-btn').addClass('disabled');
+    $('#upload-document-btn').html(`
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Working...
+    `);
+
+    var document = $('#upload-document').prop('files')[0];
+    var description = $('#upload-description').val();
+
+    var formData = new FormData();
+    formData.append('action', 'upload-document');
+    formData.append('document', document);
+    formData.append('description', description);
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#upload-document-result').removeClass('alert-info');
+            $('#upload-document-result').removeClass('alert-success');
+            $('#upload-document-result').addClass('alert-danger');
+            $('#upload-document-result').addClass('alert');
+            $('#upload-document-result').html(res.data);
+            break;
+          case 1:
+            break;
+          case 2:
+            $('#upload-document-result').removeClass('alert-info');
+            $('#upload-document-result').removeClass('alert-danger');
+            $('#upload-document-result').addClass('alert-success');
+            $('#upload-document-result').addClass('alert');
+            $('#upload-document-result').html(res.data);
+
+            location.reload();
+            break;
+        }
+
+        resetBtn();
+      }
+    });
+  },
+
+  DeleteDocument: function (id) {
+    if (confirm('Είσαι σίγουρος;') == true) {
+      $.ajax({
+        type: 'post',
+        url: 'ajax.php',
+        data: {
+          'action': 'delete-document',
+          'id': id
+        },
+        success: function (res) {
+          switch (res.status) {
+            case 0:
+              alert(res.data);
+              break;
+            case 1:
+              break;
+            case 2:
+              location.reload();
+              break;
+          }
+        }
+      });
+    } else {
+      return;
+    }
+  },
+
+  LoadProjects: function () {
+    $('#loading').show();
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: {
+        'action': 'load-projects'
+      },
+      success: function (res) {
+        console.log(res);
+
+        switch (res.status) {
+          case 0:
+            $('#projects-result').html('<div class="alert alert-danger">Δεν υπάρχουν αποτελέσματα.</div>');
+            break;
+          case 1:
+            break;
+          case 2:
+            console.log(res);
+            result = '';
+
+            res.data.forEach(project => {
+              result += `
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      ${project.display_edit_button ? `
+                      <a href="#${project.id}" class="btn btn-danger btn-sm" onclick="javascript:app.DeleteProject(${project.id});">
+                        <i class="bi bi-trash3"></i>
+                      </a>
+                      ` : ''}
+                      <span class="badge bg-dark">${project.id}</span>
+                      ${project.title}
+                    </h5>
+                    <p class="card-text">
+                      ${project.body}
+                      <hr />
+                      ${project.document[0] === 'ok' ? `
+                      <a class="btn btn-primary btn-sm" href="download-document.php?id=${project.document[1].id}">
+                        <i class="bi bi-download"></i>
+                        Λήψη
+                      </a>
+                      ` : `
+                      <span class="badge bg-danger">Δεν υπάρχει αρχείο</span>
+                      `}
+                      <br />
+
+                      <small class="text-muted ${project.display_edit_button ? 'text-end' : ''}">
+                        Ανέβηκε στις ${project.creation_date}
+                      </small>
+                    </p>
+                    ${document.project_id !== null ? `<a href="?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
+                  </div>
+                </div>
+                <br />
+              `;
+            });
+
+            $('#projects-result').html(result);
+
+            break;
+        }
+      }
+    });
+
+    $('#loading').hide();
+  },
+
+  AddProject: function () {
+    const resetBtn = () => {
+      $('#add-project-btn').removeClass('disabled');
+      $('#add-project-btn').html(`
+        <i class="bi bi-send"></i>
+        Προσθήκη
+      `);
+    }
+
+    $('#add-project-btn').addClass('disabled');
+    $('#add-project-btn').html(`
+      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Working...
+    `);
+
+    var document = $('#upload-document').prop('files')[0];
+    var title = $('#add-title').val();
+    var body = $('#add-body').val();
+    var deadline = $('#add-deadline-date').val();
+
+    var formData = new FormData();
+    formData.append('action', 'add-project');
+    formData.append('document', document);
+    formData.append('title', title);
+    formData.append('body', body);
+    formData.append('deadline', deadline);
+
+    $.ajax({
+      type: 'post',
+      url: 'ajax.php',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function (res) {
+        switch (res.status) {
+          case 0:
+            $('#add-project-result').removeClass('alert-info');
+            $('#add-project-result').removeClass('alert-success');
+            $('#add-project-result').addClass('alert-danger');
+            $('#add-project-result').addClass('alert');
+            $('#add-project-result').html(res.data);
+            break;
+          case 1:
+            break;
+          case 2:
+            $('#add-project-result').removeClass('alert-info');
+            $('#add-project-result').removeClass('alert-danger');
+            $('#add-project-result').addClass('alert-success');
+            $('#add-project-result').addClass('alert');
+            $('#add-project-result').html(res.data);
+
+            location.reload();
+            break;
+        }
+
+        resetBtn();
+      }
+    });
+  },
+
+  DeleteProject: function (id) {
+    if (confirm('Είσαι σίγουρος;') == true) {
+      $.ajax({
+        type: 'post',
+        url: 'ajax.php',
+        data: {
+          'action': 'delete-project',
+          'id': id
+        },
+        success: function (res) {
+          switch (res.status) {
+            case 0:
+              alert(res.data);
+              break;
+            case 1:
+              break;
+            case 2:
+              location.reload();
+              break;
+          }
+        }
+      });
+    } else {
+      return;
+    }
+  },
+  
 };
 
 // Generate random string

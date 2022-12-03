@@ -14,9 +14,9 @@
 </main>
 
 <script defer type="text/javascript">
-$.fn.selectpicker.Constructor.BootstrapVersion = '5';
-
 $(document).ready(function() {
+  $.fn.selectpicker.Constructor.BootstrapVersion = '5';
+
   // enable tooltips
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
   var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {

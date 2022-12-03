@@ -54,12 +54,12 @@
             </label>
           </div>
 
-          <div class="form-check form-switch mb-3">
+          <!-- <div class="form-check form-switch mb-3">
             <input class="form-check-input" name="add-is-project" id="add-is-project" type="checkbox" value="">
             <label class="form-check-label" for="add-is-project">
               Είναι ανακοίνωση εργασίας
             </label>
-          </div>
+          </div> -->
 
         </form>
       </div>
@@ -107,12 +107,12 @@
             </label>
           </div>
 
-          <div class="form-check form-switch mb-3">
+          <!-- <div class="form-check form-switch mb-3">
             <input class="form-check-input" name="edit-is-project" id="edit-is-project" type="checkbox" value="">
             <label class="form-check-label" for="edit-is-project">
               Είναι ανακοίνωση εργασίας
             </label>
-          </div>
+          </div> -->
 
         </form>
       </div>

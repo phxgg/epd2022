@@ -20,6 +20,8 @@ require_once 'classes/misc.class.php';
 require_once 'classes/account.class.php';
 require_once 'classes/users.class.php';
 require_once 'classes/announcements.class.php';
+require_once 'classes/documents.class.php';
+require_once 'classes/projects.class.php';
 
 // JBBCode
 require_once 'lib/JBBCode/Parser.php';

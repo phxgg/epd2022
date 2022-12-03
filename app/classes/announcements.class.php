@@ -11,6 +11,7 @@ class Announcements extends CMS
         `title`,
         `body`,
         `is_project`,
+        `projectId`,
         `creation_date`
       FROM `announcements` ORDER BY `id` DESC'
     );
@@ -40,6 +41,7 @@ class Announcements extends CMS
         `title`,
         `body`,
         `is_project`,
+        `projectId`,
         `creation_date`
       FROM `announcements`
       WHERE `id` = %d',
@@ -53,7 +55,7 @@ class Announcements extends CMS
   }
 
   // return array(data, message)
-  public static function AddAnnouncement($title, $body, $isproject)
+  public static function AddAnnouncement($title, $body, $isproject, $projectId)
   {
     global $mysqli;
 
@@ -66,26 +68,37 @@ class Announcements extends CMS
     $title = $mysqli->real_escape_string($title);
     $body = $mysqli->real_escape_string($body);
 
-    $query = $mysqli->query(sprintf(
-      'INSERT INTO `announcements` (`title`, `body`, `is_project`) VALUES("%s", "%s", %d)',
-      $title,
-      $body,
-      $isproject
-    ));
+    if ($isproject == 1 && $projectId !== NULL) {
+      $projectId = intval($projectId);
+      $insert = $mysqli->query(sprintf(
+        'INSERT INTO `announcements` (`title`, `body`, `is_project`, `projectId`) VALUES ("%s", "%s", %d, %d)',
+        $title,
+        $body,
+        $isproject,
+        $projectId
+      ));
+    } else {
+      $insert = $mysqli->query(sprintf(
+        'INSERT INTO `announcements` (`title`, `body`, `is_project`) VALUES ("%s", "%s", %d)',
+        $title,
+        $body,
+        $isproject
+      ));
+    }
     
-    if ($query)
+    if ($insert)
       return ['ok', 'Announcement added successfully'];
 
     return [NULL, 'Something went wrong.'];
   }
 
-  public static function EditAnnouncement($id, $title, $body, $isproject)
+  public static function EditAnnouncement($id, $title, $body)
   {
     global $mysqli;
 
     $id = intval($id);
-    $isproject = intval($isproject);
-    if ($isproject != 0 && $isproject != 1) $isproject = 0;
+    // $isproject = intval($isproject);
+    // if ($isproject != 0 && $isproject != 1) $isproject = 0;
 
     if (Misc::MultipleEmpty($title, $body))
       return [NULL, 'All fields are required.'];
@@ -102,12 +115,11 @@ class Announcements extends CMS
       'UPDATE `announcements`
       SET
         `title` = "%s",
-        `body` = "%s",
-        `is_project` = %d
+        `body` = "%s"
       WHERE `id` = %d',
       $title,
       $body,
-      $isproject,
+      // $isproject,
       $id
     ));
     
