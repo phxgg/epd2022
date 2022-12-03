@@ -1197,22 +1197,5 @@ var app = {
   
 };
 
-// Generate random string
-function makeid(length) {
-  var result = '';
-  var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  var charactersLength = characters.length;
-  for (var i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-  return result;
-}
-
-// Remove element from array
-function removeFromArray(arr, el) {
-  arr.splice(arr.indexOf(el), 1);
-  return arr;
-}
-
 // Dates
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
