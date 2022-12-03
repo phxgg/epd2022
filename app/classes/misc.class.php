@@ -3,16 +3,6 @@ if (!defined('ACCESS')) exit;
 
 class Misc extends CMS
 {
-  public static $weekDays = [
-    'monday',
-    'tuesday',
-    'wednesday',
-    'thursday',
-    'friday',
-    'saturday',
-    'sunday'
-  ];
-
   public static function GenerateRandomString($length = 8)
   {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -22,18 +12,6 @@ class Misc extends CMS
     }
     return $randomString;
   }
-
-  /*
-  public static function MultipleEmpty()
-  {
-    foreach (func_get_args() as $arg)
-      if (empty($arg))
-        continue;
-      else
-        return false;
-    return true;
-  }
-  */
 
   /**
    * Function to check whether a variable is empty or not.

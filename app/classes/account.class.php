@@ -61,10 +61,10 @@ class Account extends CMS
     global $mysqli;
 
     if (Misc::MultipleEmpty($email, $pass))
-      return Misc::Error('Email and/or pass empty.');
+      return Misc::Error('To email ή/και ο κωδικός είναι κενός.');
 
     if (!Misc::IsValidEmail($email))
-      return Misc::Error('Invalid email.');
+      return Misc::Error('Το email δεν είναι έγκυρο.');
 
     $email = $mysqli->real_escape_string($email);
 
@@ -74,10 +74,10 @@ class Account extends CMS
     ))->fetch_object();
 
     if (empty($account))
-      return Misc::Error('User not found.');
+      return Misc::Error('Δεν βρέθηκε λογαριασμός με αυτό το email.');
 
     if (md5(md5($pass) . $account->salt) != $account->password)
-      return Misc::Error('Wrong password.');
+      return Misc::Error('Λάθος κωδικός.');
 
     $_SESSION['loggedIn'] = true;
     $_SESSION['uid'] = $account->id;
@@ -89,13 +89,13 @@ class Account extends CMS
   {
     global $mysqli;
     if (Misc::MultipleEmpty($firstname, $lastname, $email, $pass, $confirmpass))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     if ($pass !== $confirmpass)
-      return [NULL, 'Password confirmation failed.'];
+      return [NULL, 'Οι κωδικοί δεν ταιριάζουν.'];
 
     if (!Misc::IsValidEmail($email))
-      return [NULL, 'Invalid email format.'];
+      return [NULL, 'Το email δεν είναι έγκυρο.'];
 
     $email = $mysqli->real_escape_string($email);
 
@@ -105,7 +105,7 @@ class Account extends CMS
     ))->fetch_object();
 
     if (!empty($exists))
-      return [NULL, 'A user with this email already exists.'];
+      return [NULL, 'Υπάρχει ήδη λογαριασμός με αυτό το email.'];
 
     $salt = Misc::GenerateRandomString(32);
     $password = md5(md5($mysqli->real_escape_string($pass)) . $salt);
@@ -123,9 +123,9 @@ class Account extends CMS
     ));
 
     if ($query)
-      return ['ok', 'User registered successfully.'];
+      return ['ok', 'Επιτυχής εγγραφή.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   // return array(data, message)
@@ -134,13 +134,13 @@ class Account extends CMS
     global $mysqli;
 
     if (Misc::MultipleEmpty($oldpass, $newpass, $confirm))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     if ($newpass !== $confirm)
-      return [NULL, 'Password confirmation failed.'];
+      return [NULL, 'Οι κωδικοί δεν ταιριάζουν.'];
 
     if (md5(md5($oldpass) . self::getAccount()->salt) != self::getAccount()->password)
-      return [NULL, 'Old password is not correct.'];
+      return [NULL, 'Λάθος κωδικός.'];
 
     $salt = Misc::GenerateRandomString(32);
     $query = $mysqli->query(sprintf(
@@ -151,9 +151,9 @@ class Account extends CMS
     ));
 
     if ($query)
-      return ['ok', 'Password changed!'];
+      return ['ok', 'Επιτυχής αλλαγή κωδικού.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   // return array(data, message)
@@ -162,13 +162,13 @@ class Account extends CMS
     global $mysqli;
 
     if (Misc::MultipleEmpty($currpass, $newemail))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     if (!Misc::IsValidEmail($newemail))
-      return [NULL, 'Invalid email.'];
+      return [NULL, 'Το email δεν είναι έγκυρο.'];
 
     if (md5(md5($currpass) . self::getAccount()->salt) != self::getAccount()->password)
-      return [NULL, 'Your password is not correct'];
+      return [NULL, 'Λάθος κωδικός.'];
 
     $newemail = $mysqli->real_escape_string($newemail);
 
@@ -179,7 +179,7 @@ class Account extends CMS
     ));
 
     if ($check->num_rows != 0)
-      return [NULL, 'This email is used by another user. Choose something else.'];
+      return [NULL, 'Υπάρχει ήδη λογαριασμός με αυτό το email.'];
 
     $query = $mysqli->query(sprintf(
       'UPDATE `users` SET `email` = "%s" WHERE `id` = %d',
@@ -188,8 +188,8 @@ class Account extends CMS
     ));
 
     if ($query)
-      return ['ok', 'Email changed!'];
+      return ['ok', 'Επιτυχής αλλαγή email.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 }

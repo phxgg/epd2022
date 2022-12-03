@@ -204,7 +204,7 @@ var app = {
     var newemail = $('#email-newemail').val();
 
     if (!currentpassword || !newemail) {
-      $('#change-email-result').html('<div class="alert alert-danger">All fields are required.</div>');
+      $('#change-email-result').html('<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>');
       resetBtn();
       return;
     }
@@ -254,13 +254,13 @@ var app = {
     var confirmpassword = $('#pass-confirmpass').val();
 
     if (!currentpassword || !newpassword || !confirmpassword) {
-      $('#change-password-result').html('<div class="alert alert-danger">All fields are required.</div>');
+      $('#change-password-result').html('<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>');
       resetBtn();
       return;
     }
 
     if (newpassword !== confirmpassword) {
-      $('#change-password-result').html('<div class="alert alert-danger">Password confirmation failed.</div>');
+      $('#change-password-result').html('<div class="alert alert-danger">Οι κωδικοί δεν ταιριάζουν.</div>');
       resetBtn();
       return;
     }
@@ -317,13 +317,13 @@ var app = {
       || !email
       || !password
       || !confirmpassword) {
-      $('#register-result').html(`<div class="alert alert-danger">All fields are required.</div>`);
+      $('#register-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
       resetBtn();
       return;
     }
 
     if (password !== confirmpassword) {
-      $('#register-result').html(`<div class="alert alert-danger">Password confirmation failed.</div>`);
+      $('#register-result').html(`<div class="alert alert-danger">Οι κωδικοί δεν ταιριάζουν.</div>`);
       resetBtn();
       return;
     }
@@ -440,13 +440,13 @@ var app = {
       || !email
       || !password
       || !confirmpassword) {
-      $('#add-user-result').html(`<div class="alert alert-danger">All fields are required.</div>`);
+      $('#add-user-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
       resetBtn();
       return;
     }
 
     if (password !== confirmpassword) {
-      $('#add-user-result').html('<div class="alert alert-danger">Password confirmation failed.</div>')
+      $('#add-user-result').html('<div class="alert alert-danger">Οι κωδικοί δεν ταιριάζουν.</div>')
       resetBtn();
       return;
     }
@@ -510,7 +510,7 @@ var app = {
     if (!firstname
       || !lastname
       || !email) {
-      $('#edit-user-result').html(`<div class="alert alert-danger">All fields are required.</div>`);
+      $('#edit-user-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
       resetBtn();
       return;
     }
@@ -649,7 +649,7 @@ var app = {
 
     if (!title
       || !body) {
-      $('#add-announcement-result').html(`<div class="alert alert-danger">All fields are required.</div>`);
+      $('#add-announcement-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
       resetBtn();
       return;
     }
@@ -708,7 +708,7 @@ var app = {
 
     if (!title
       || !body) {
-      $('#edit-announcement-result').html(`<div class="alert alert-danger">All fields are required.</div>`);
+      $('#edit-announcement-result').html(`<div class="alert alert-danger">Όλα τα πεδία είναι υποχρεωτικά.</div>`);
       resetBtn();
       return;
     }
@@ -1215,5 +1215,4 @@ function removeFromArray(arr, el) {
 }
 
 // Dates
-const weekDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };

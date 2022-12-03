@@ -86,13 +86,13 @@ class Users extends CMS
     if ($role != 0 && $role != 1) $role = 0; 
 
     if (Misc::MultipleEmpty($firstname, $lastname, $email, $pass, $confirmpass))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     if ($pass !== $confirmpass)
-      return [NULL, 'Password confirmation failed.'];
+      return [NULL, 'Οι κωδικοί δεν ταιριάζουν.'];
 
     if (!Misc::IsValidEmail($email))
-      return [NULL, 'Invalid email format.'];
+      return [NULL, 'Μη έγκυρο email.'];
 
     $email = $mysqli->real_escape_string($email);
 
@@ -101,7 +101,7 @@ class Users extends CMS
     ));
 
     if ($account->num_rows != 0)
-      return [NULL, 'This email already exists. Choose something else.'];
+      return [NULL, 'Το email χρησιμοποιείται ήδη.'];
 
     $account = $account->fetch_object();
 
@@ -120,9 +120,9 @@ class Users extends CMS
     ));
     
     if ($query)
-      return ['ok', 'User added successfully'];
+      return ['ok', 'Ο χρήστης προστέθηκε επιτυχώς.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   public static function EmailExists($email)
@@ -148,20 +148,20 @@ class Users extends CMS
     if ($role != 0 && $role != 1 ) $role = 0; 
 
     if (Misc::MultipleEmpty($firstname, $lastname, $email))
-      return [NULL, 'All fields are required.'];
+      return [NULL, 'Όλα τα πεδία είναι υποχρεωτικά.'];
 
     if (!Misc::IsValidEmail($email))
-      return [NULL, 'Invalid email format.'];
+      return [NULL, 'Μη έγκυρο email.'];
 
     // Get current user info
     $fetch = Users::Fetch($uid);
     if (empty($fetch))
-      return [NULL, 'User not found.'];
+      return [NULL, 'Ο χρήστης δεν βρέθηκε.'];
 
     // If the email has been changed then perform a check so we don't update the user with a value that is already used
     if ($email != $fetch->email)
       if (self::EmailExists($email))
-        return [NULL, 'This email already exists.'];
+        return [NULL, 'Το email χρησιμοποιείται ήδη.'];
 
     $email = $mysqli->real_escape_string($email);
 
@@ -184,9 +184,9 @@ class Users extends CMS
     ));
     
     if ($query)
-      return ['ok', 'User edited successfully'];
+      return ['ok', 'Ο χρήστης ενημερώθηκε επιτυχώς.'];
 
-    return [NULL, 'Something went wrong.'];
+    return [NULL, 'Κάτι πήγε στραβά.'];
   }
 
   public static function DeleteUser($uid)
@@ -195,44 +195,15 @@ class Users extends CMS
 
     $fetch = Users::Fetch($uid);
     if (empty($fetch))
-      return [NULL, 'This user does not exist.'];
+      return [NULL, 'Ο χρήστης δεν βρέθηκε.'];
     
     $uid = intval($uid);
 
     $query = $mysqli->query(sprintf('DELETE FROM `users` WHERE `id` = %d', $uid));
 
-    // // Also delete all bookings and stores associated with this user
-    // $ownedStores = Stores::GetOwnedStoresByUserId($uid);
-
-    // foreach($ownedStores as $store) {
-    //   // delete store. This function also deletes all bookings associated with this store
-    //   Stores::DeleteStore($store->id);
-    // }
-
-    // $deleteUserBookings = $mysqli->query(sprintf('DELETE FROM `bookings` WHERE `uid` = %d', $uid));
-
-    if ($query) // && $deleteUserBookings
-      return ['ok', 'Deleted user!'];
+    if ($query)
+      return ['ok', 'Ο χρήστης διαγράφηκε επιτυχώς.'];
 
     return [NULL, 'Something went wrong.'];
   }
-
-  // public static function OwnsStore($storeid, $uid = -1)
-  // {
-  //   global $mysqli;
-
-  //   $uid = ($uid == -1) ? intval($_SESSION['uid']) : intval($uid);
-
-  //   $storeid = intval($storeid);
-
-  //   $owns = $mysqli->query(sprintf(
-  //     'SELECT `id` FROM `stores` WHERE `id` = %d AND `added_by` = %d',
-  //     $storeid,
-  //     $uid
-  //   ));
-
-  //   if ($owns->num_rows != 0 || Account::IsAdmin())
-  //     return true;
-  //   return false;
-  // }
 }
