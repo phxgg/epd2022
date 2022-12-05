@@ -10,7 +10,7 @@
 <div class="card text-dark mb-3">
   <div class="card-body">
     <?php if (Account::IsTutor()) : ?>
-      <a href="?page=projects" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+      <a href="<?= BASE_URL; ?>/?page=projects" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addProjectModal">
         <i class="bi bi-plus"></i>
         Προσθήκη
       </a>
@@ -124,7 +124,7 @@
 
             <small class="text-muted">
               <i class="bi bi-file-earmark-pdf"></i>
-              Για επεξεργασία του έγγραφου κατευθεινθείτε στα <a href="?page=documents" id="edit-document-link" target="_blank">έγγραφα</a>
+              Για επεξεργασία του έγγραφου κατευθεινθείτε στα <a href="<?= BASE_URL; ?>/?page=documents" id="edit-document-link" target="_blank">έγγραφα</a>
             </small>
 
         </form>

@@ -40,7 +40,7 @@ function LogError($e)
 if (Account::IsLoggedIn()) {
   if (!Account::getAccount()) {
     session_destroy();
-    header('Location: /?page=index');
+    header('Location: '.BASE_URL.'/?page=index');
     die();
   }
 }

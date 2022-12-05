@@ -18,7 +18,7 @@ class CMS
   public static function LoadTemplate($tpl)
   {
     if (!file_exists(sprintf('app/templates/%s.tpl.php', $tpl)))
-      header('Location: /?page=index');
+      header('Location: '.BASE_URL.'/?page=index');
 
     // Templates
     $data = Pages::$main;

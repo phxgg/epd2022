@@ -8,7 +8,7 @@ function DownloadFile($content, $filename, $extension) {
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
-    // header('Content-Length: ' . filesize('uploads/' . $file['name']));
+    // header('Content-Length: ' . filesize($file['name']));
     echo $content;
 }
 

@@ -10,7 +10,7 @@
 <div class="card text-dark mb-3">
   <div class="card-body">
     <?php if (Account::IsTutor()) : ?>
-      <a href="?page=announcements" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
+      <a href="<?= BASE_URL; ?>/?page=announcements" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addAnnouncementModal">
         <i class="bi bi-plus"></i>
         Δημιουργία
       </a>

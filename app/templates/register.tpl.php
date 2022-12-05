@@ -2,7 +2,7 @@
 
 <?php
 // Disable registration
-header('Location: ?page=index');
+header('Location: '.BASE_URL.'/?page=index');
 exit;
 ?>
 

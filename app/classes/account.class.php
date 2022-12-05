@@ -12,7 +12,7 @@ class Account extends CMS
   public static function NoLogin()
   {
     if (self::IsLoggedIn()) {
-      header('Location: /?page=index');
+      header('Location: '.BASE_URL.'/?page=index');
       die();
     }
   }
@@ -20,7 +20,7 @@ class Account extends CMS
   public static function LoginRequired()
   {
     if (!self::IsLoggedIn()) {
-      header('Location: /?page=login');
+      header('Location: '.BASE_URL.'/?page=login');
       die();
     }
   }
@@ -35,7 +35,7 @@ class Account extends CMS
   public static function TutorRequired()
   {
     if (!self::IsLoggedIn() || !self::IsTutor()) {
-      header('Location: /?page=index');
+      header('Location: '.BASE_URL.'/?page=index');
       die();
     }
   }
@@ -81,7 +81,7 @@ class Account extends CMS
 
     $_SESSION['loggedIn'] = true;
     $_SESSION['uid'] = $account->id;
-    header('Location: ?page=index');
+    header('Location: '.BASE_URL.'/?page=index');
   }
 
   // return array(data, message)

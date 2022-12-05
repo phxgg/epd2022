@@ -185,13 +185,13 @@
     Υλοποιήθηκαν οι εξής σελίδες:
   <ul>
     <li>
-      <a href="?page=index">Αρχική</a>
+      <a href="<?= BASE_URL; ?>/?page=index">Αρχική</a>
     </li>
     <li>
-      <a href="?page=login">Σύνδεση</a>
+      <a href="<?= BASE_URL; ?>/?page=login">Σύνδεση</a>
     </li>
     <li>
-      <a href="?page=announcements">Ανακοινώσεις</a>
+      <a href="<?= BASE_URL; ?>/?page=announcements">Ανακοινώσεις</a>
       <ul>
         <li>
           Οι διδάσκοντες μπορούν να δημιουργούν, να διαγράφουν και να επεξεργάζονται ανακοινώσεις.
@@ -199,7 +199,7 @@
       </ul>
     </li>
     <li>
-      <a href="?page=documents">Έγγραφα</a>
+      <a href="<?= BASE_URL; ?>/?page=documents">Έγγραφα</a>
       <ul>
         <li>
           Οι διδάσκοντες μπορούν να δημιουργούν, να διαγράφουν και να επεξεργάζονται έγγραφα.
@@ -233,7 +233,7 @@
       </ul>
     </li>
     <li>
-      <a href="?page=projects">Εργασίες</a>
+      <a href="<?= BASE_URL; ?>/?page=projects">Εργασίες</a>
       <ul>
         <li>
           Οι διδάσκοντες μπορούν να δημιουργούν, να διαγράφουν και να επεξεργάζονται εργασίες.
@@ -249,7 +249,7 @@
       </ul>
     </li>
     <li>
-      <a href="?page=manage-users">Διαχείριση χρηστών</a> <small class="text-muted font-small"><i>(μόνο για διδάσκοντες)</i></small>
+      <a href="<?= BASE_URL; ?>/?page=manage-users">Διαχείριση χρηστών</a> <small class="text-muted font-small"><i>(μόνο για διδάσκοντες)</i></small>
       <ul>
         <li>Οι διδάσκοντες μπορούν να δημιουργούν, να διαγράφουν και να επεξεργάζονται χρήστες.</li>
         <li>Προβολή με τη χρήση DataTables.</li>

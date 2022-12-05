@@ -611,7 +611,7 @@ var app = {
                     <p class="card-text">
                       ${announcement.body}
                     </p>
-                    ${announcement.is_project == 1 ? `<a href="?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
+                    ${announcement.is_project == 1 ? `<a href="index.php?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
                   </div>
                 </div>
                 <br />
@@ -820,7 +820,7 @@ var app = {
                         Ανέβηκε στις ${document.creation_date}
                       </small>
                     </p>
-                    ${document.project_id !== null ? `<a href="?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
+                    ${document.project_id !== null ? `<a href="index.php?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
                   </div>
                 </div>
                 <br />

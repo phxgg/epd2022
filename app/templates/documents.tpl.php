@@ -10,7 +10,7 @@
 <div class="card text-dark mb-3">
   <div class="card-body">
     <?php if (Account::IsTutor()) : ?>
-      <a href="?page=documents" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
+      <a href="<?= BASE_URL; ?>/?page=documents" class="btn btn-sm btn-purple" data-bs-toggle="modal" data-bs-target="#addDocumentModal">
         <i class="bi bi-plus"></i>
         Προσθήκη
       </a>

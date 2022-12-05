@@ -70,38 +70,38 @@ function active($page)
         <!-- <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button> -->
       </div>
       <div class="offcanvas-body">
-        <a href="/?page=index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <a href="<?= BASE_URL; ?>/?page=index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
           <span class="fs-4"><?= SITE_NAME; ?></span>
         </a>
         <hr class="text-muted">
         <ul class="nav nav-pills flex-column mb-auto">
           <li>
-            <a href="?page=index" <?= active('index'); ?>>
+            <a href="<?= BASE_URL; ?>/?page=index" <?= active('index'); ?>>
               <i class="bi bi-grid"></i>
               Αρχική
             </a>
           </li>
           <li>
-            <a href="?page=announcements" <?= active('announcements'); ?>>
+            <a href="<?= BASE_URL; ?>/?page=announcements" <?= active('announcements'); ?>>
               <i class="bi bi-tags"></i>
               Ανακοινώσεις
             </a>
           </li>
           <li>
-            <a href="?page=documents" <?= active('documents'); ?>>
+            <a href="<?= BASE_URL; ?>/?page=documents" <?= active('documents'); ?>>
               <i class="bi bi-file-earmark-pdf"></i>
               Έγγραφα
             </a>
           </li>
           <li>
-            <a href="?page=projects" <?= active('projects'); ?>>
+            <a href="<?= BASE_URL; ?>/?page=projects" <?= active('projects'); ?>>
               <i class="bi bi-server"></i>
               Εργασίες
             </a>
           </li>
           <?php if (Account::IsTutor()) : ?>
             <li>
-              <a href="?page=manage-users" <?= active('manage-users'); ?>>
+              <a href="<?= BASE_URL; ?>/?page=manage-users" <?= active('manage-users'); ?>>
                 <i class="bi bi-people"></i>
                 Διαχείριση χρηστών
               </a>
@@ -117,7 +117,7 @@ function active($page)
           </a>
           <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser">
             <li>
-              <a class="dropdown-item" href="/?page=settings">
+              <a class="dropdown-item" href="<?= BASE_URL; ?>/?page=settings">
                 <i class="bi bi-gear-wide-connected"></i>
                 Ρυθμίσεις
               </a>
@@ -126,7 +126,7 @@ function active($page)
               <hr class="dropdown-divider">
             </li>
             <li>
-              <a class="dropdown-item" href="/?page=logout" style="color: #a94442;">
+              <a class="dropdown-item" href="<?= BASE_URL; ?>/?page=logout" style="color: #a94442;">
                 <i class="bi bi-box-arrow-left"></i>
                 Αποσύνδεση
               </a>
@@ -146,7 +146,7 @@ function active($page)
           <a data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar" aria-controls="offcanvasSidebar" class="btn border-0 bg-dark" id="sidebarCollapse">
             <i class="bi bi-distribute-vertical text-white"></i>
           </a>
-          <a href="/?page=index" class="d-flex align-items-center px-2 link-dark text-decoration-none">
+          <a href="<?= BASE_URL; ?>/?page=index" class="d-flex align-items-center px-2 link-dark text-decoration-none">
             <span class="fs-4"><?= SITE_NAME; ?></span>
           </a>
         </div>
@@ -154,7 +154,7 @@ function active($page)
         <div class="d-flex">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="btn btn-outline-info" href="/?page=contact">
+              <a class="btn btn-outline-info" href="<?= BASE_URL; ?>/?page=contact">
               <i class="bi bi-chat-dots"></i>
               </a>
             </li>

@@ -2,7 +2,7 @@
 
 <?php
 if (Account::IsLoggedIn()) {
-  header('Location: ?page=index');
+  header('Location: '.BASE_URL.'/?page=index');
 }
 ?>
 

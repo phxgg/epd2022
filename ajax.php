@@ -13,7 +13,7 @@ function reply($status, $data)
 if (@$_SERVER['REQUEST_METHOD'] !== 'POST') die();
 
 // if (!Account::IsLoggedIn())
-//   reply(StatusCodes::Error, 'Not logged in.');
+//   reply(StatusCodes::Error, 'No access.');
 
 // List of allowed actions
 $allowed_actions = [
@@ -59,7 +59,7 @@ if (!in_array($action, $allowed_actions))
 switch ($action) {
   case 'load-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['uid']))
       reply(StatusCodes::Error, 'Invalid parameters.');
@@ -73,7 +73,7 @@ switch ($action) {
     break;
   case 'load-announcement':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['id']))
       reply(StatusCodes::Error, 'Invalid parameters.');
@@ -87,7 +87,7 @@ switch ($action) {
     break;
   case 'load-users':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     $data = Users::GetAllUsers();
 
@@ -98,7 +98,7 @@ switch ($action) {
     break;
   case 'load-announcements':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'Not logged in.');
+      reply(StatusCodes::Error, 'No access.');
 
     $data = Announcements::GetAllAnnouncements();
 
@@ -109,7 +109,7 @@ switch ($action) {
     break;
   case 'change-email':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'Not logged in.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['currentpassword']) || !isset($_POST['newemail']))
       reply(StatusCodes::Error, 'Invalid parameters.');
@@ -123,7 +123,7 @@ switch ($action) {
     break;
   case 'change-password':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'Not logged in.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['currentpassword']) || !isset($_POST['newpassword']) || !isset($_POST['confirmpassword']))
       reply(StatusCodes::Error, 'Invalid parameters.');
@@ -163,7 +163,7 @@ switch ($action) {
     break;
   case 'add-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     $role = 0;
     if (isset($_POST['role'])) $role = $_POST['role'];
@@ -193,7 +193,7 @@ switch ($action) {
     break;
   case 'add-announcement':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (
       !isset($_POST['title'])
@@ -215,7 +215,7 @@ switch ($action) {
     break;
   case 'add-project':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (
       !isset($_POST['title'])
@@ -239,7 +239,7 @@ switch ($action) {
     break;
   case 'edit-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     $role = 0;
     if (isset($_POST['role'])) $role = $_POST['role'];
@@ -267,7 +267,7 @@ switch ($action) {
     break;
   case 'load-documents':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'Not logged in.');
+      reply(StatusCodes::Error, 'No access.');
 
     $data = Documents::GetAllDocuments();
 
@@ -292,7 +292,7 @@ switch ($action) {
     break;
   case 'load-projects':
     if (!Account::IsLoggedIn())
-      reply(StatusCodes::Error, 'Not logged in.');
+      reply(StatusCodes::Error, 'No access.');
 
     $data = Projects::GetAllProjects();
 
@@ -317,7 +317,7 @@ switch ($action) {
     break;
   case 'edit-project':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     // $isproject = 0;
     // if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
@@ -405,7 +405,7 @@ switch ($action) {
     break;
   case 'edit-announcement':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     // $isproject = 0;
     // if (isset($_POST['isproject'])) $isproject = $_POST['isproject'];
@@ -431,7 +431,7 @@ switch ($action) {
     break;
   case 'add-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     $role = 0;
     if (isset($_POST['role'])) $rank = $_POST['role'];
@@ -461,7 +461,7 @@ switch ($action) {
     break;
   case 'delete-user':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['uid']))
       reply(StatusCodes::Error, 'Invalid parameters.');
@@ -475,7 +475,7 @@ switch ($action) {
     break;
   case 'delete-announcement':
     if (!Account::IsLoggedIn() || !Account::IsTutor())
-      reply(StatusCodes::Error, 'You are not a tutor.');
+      reply(StatusCodes::Error, 'No access.');
 
     if (!isset($_POST['id']))
       reply(StatusCodes::Error, 'Invalid parameters.');

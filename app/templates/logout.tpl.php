@@ -1,4 +1,4 @@
 <?php
 if (!defined('ACCESS')) exit;
 session_destroy();
-header('Location: /?page=login');
+header('Location: '.BASE_URL.'/?page=login');
