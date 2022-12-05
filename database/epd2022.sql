@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 05, 2022 at 09:46 AM
+-- Generation Time: Dec 05, 2022 at 09:53 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.1.2
 
@@ -76,7 +76,7 @@ CREATE TABLE `projects` (
   `id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `body` text NOT NULL,
-  `deadline_date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `deadline_date` timestamp NULL DEFAULT NULL,
   `creation_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -85,7 +85,7 @@ CREATE TABLE `projects` (
 --
 
 INSERT INTO `projects` (`id`, `title`, `body`, `deadline_date`, `creation_date`) VALUES
-(1, 'Project 1', 'Σκοπός της εργασίας:\r\n\r\n1. Σκοπός 1\r\n2. Σκοπός 2\r\n3. Σκοπός 3\r\n\r\nΠαραδοτέα:\r\n\r\n1. .pdf αρχείο με επεξήγηση\r\n2. .zip αρχείο με τον κώδικα project', '2023-01-08 22:00:00', '2022-12-05 08:44:18');
+(1, 'Project 1', 'Σκοπός της εργασίας:\r\n\r\n1. Σκοπός 1\r\n2. Σκοπός 2\r\n3. Σκοπός 3\r\n\r\nΠαραδοτέα:\r\n\r\n1. .pdf αρχείο με επεξήγηση\r\n2. .zip αρχείο με τον κώδικα project', '2022-12-05 08:52:03', '2022-12-05 08:44:18');
 
 -- --------------------------------------------------------
 
