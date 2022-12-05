@@ -817,7 +817,7 @@ var app = {
                       <br />
 
                       <small class="text-muted ${document.display_edit_button ? 'text-end' : ''}">
-                        Ανέβηκε στις ${document.creation_date}
+                        Ανέβηκε στις ${new Date(document.creation_date).toLocaleString('el-GR', dateOptions)}
                       </small>
                     </p>
                     ${document.project_id !== null ? `<a href="index.php?page=projects" class="card-link">Δείτε τις εργασίες</a>` : ''}
@@ -1033,7 +1033,7 @@ var app = {
                       <br />
 
                       <small class="text-muted ${project.display_edit_button ? 'text-end' : ''}">
-                        Ανέβηκε στις ${project.creation_date}
+                        Ανέβηκε στις ${new Date(project.creation_date).toLocaleString('el-GR', dateOptions)}
                       </small>
                     </p>
                   </div>
@@ -1198,4 +1198,4 @@ var app = {
 };
 
 // Dates
-const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
